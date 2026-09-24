@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(flutter-invoice-app-builder)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter build:*)",
+      "Bash(dir:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter --version)"
+    ]
+  }
+}

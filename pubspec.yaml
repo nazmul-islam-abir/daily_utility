@@ -1,0 +1,76 @@
+name: daily_utility
+description: "Daily Utility — todo, notes, finance, baki khata, loans, calculators, shopping list, date tools, reminders and prayer times, all offline-first on Hive."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Local database (no server, everything offline)
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.4
+
+  # Ids, dates, formatting
+  uuid: ^4.4.2
+  intl: ^0.20.3
+
+  # Local notifications for optional reminders (5/10/20/30/45/60 min before)
+  flutter_local_notifications: ^17.2.3
+  timezone: ^0.9.4
+
+  # Offline astronomical prayer-time calculation (no internet required —
+  # computed from lat/long, cached in Hive for the day so it also works
+  # fully offline once the location is known).
+  adhan_dart: ^2.0.1
+
+  # Device location for prayer times / qibla bearing (optional; falls back
+  # to a manually-entered city if permission is denied).
+  geolocator: ^13.0.1
+
+  # Settings persistence (theme, backup toggles, last backup time, etc.)
+  shared_preferences: ^2.3.2
+
+  # Local backup: pick a JSON file to import, share an exported JSON via
+  # WhatsApp / email / Drive / Dropbox — no Google account required.
+  file_picker: ^10.3.4
+  share_plus: ^10.0.2
+  flutter_compass: ^0.8.1
+
+  # Pick images (camera + gallery) for profile avatar and post photos.
+  image_picker: ^1.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/audio/
+
+flutter_launcher_icons:
+  image_path: "assets/appicon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  adaptive_icon_background: "#3D5AFE"
+  adaptive_icon_foreground: "assets/applogo.png"
+  adaptive_icon_monochrome: "assets/applogo.png"
+  min_sdk_android: 21
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
