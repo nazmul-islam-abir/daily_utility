@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+// ============================================================================
+// LEGACY — kept only so this file still compiles if anything accidentally
+// imports it. Quiz data is now fetched live from Firestore via
+// `QuizService` + `QuizCategory`. See lib/screens/quiz/quiz_screen.dart.
+// ============================================================================
+
 /// A single quiz question with 4 options and one correct index.
 class QuizQuestion {
   final String questionBn;

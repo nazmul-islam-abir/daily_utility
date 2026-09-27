@@ -8,16 +8,18 @@ import '../../models/loan.dart';
 import '../../models/note.dart';
 import '../../models/post.dart';
 import '../../models/shopping_item.dart';
-import '../../models/subscription.dart';
 import '../../models/todo_item.dart';
+import '../../models/habit.dart';
 import '../../services/data_refresh_service.dart';
+import '../../services/habit_service.dart';
 import '../../services/hive_service.dart';
 import '../../services/locale_service.dart';
+import '../../services/notice_service.dart';
 import '../../services/settings_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/common_widgets.dart';
-import '../backup/backup_screen.dart';
+import '../../widgets/dashboard_sliders.dart';
 import '../baki_khata/baki_khata_screen.dart';
 import '../calculator/calculator_hub_screen.dart';
 import '../date_tools/date_tools_screen.dart';
@@ -31,10 +33,11 @@ import '../more/more_screen.dart';
 import '../notes/note_editor_screen.dart';
 import '../notes/notes_list_screen.dart';
 import '../notes/simple_note_sheet.dart';
+import '../notices/notices_screen.dart';
 import '../posts/post_editor_screen.dart';
 import '../posts/posts_list_screen.dart';
 import '../prayer/prayer_screen.dart';
-import '../quiz/quiz_screen.dart';
+import '../quiz/quiz_categories_screen.dart';
 import '../reminders/reminders_screen.dart';
 import '../settings/settings_screen.dart';
 import '../shopping/shopping_list_screen.dart';
@@ -60,16 +63,12 @@ class _MainShellState extends State<MainShell> {
   static const _pages = <Widget>[
     _HomeTab(),
     _NotesTab(),
-    SizedBox.shrink(),
-    _BackupTab(),
+    _MoodTab(),
+    _HabitTab(),
     _MoreTab(),
   ];
 
   void _setIndex(int i) {
-    if (i == 2) {
-      _showAddSheet();
-      return;
-    }
     setState(() => _index = i);
   }
 
@@ -123,16 +122,20 @@ class _MainShellState extends State<MainShell> {
       },
       child: Scaffold(
         body: IndexedStack(index: _index, children: _pages),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _showAddSheet,
-          child: const Icon(Icons.add, size: 28),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // Hide the global Quick-Add FAB on tabs that already have their own
+        // (Mood/Habit screens bring their own FABs).
+        floatingActionButton: (_index == 2 || _index == 3)
+            ? null
+            : FloatingActionButton(
+                onPressed: _showAddSheet,
+                child: const Icon(Icons.add, size: 28),
+              ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: NavigationBar(
-          selectedIndex: _index < 2 ? _index : (_index > 2 ? _index - 1 : -1),
+          selectedIndex: _index,
           onDestinationSelected: (i) {
-            final dest = i >= 2 ? i + 1 : i;
-            _setIndex(dest);
+            // Index 0 = Home, 1 = Note, 2 = Mood, 3 = Habit, 4 = More.
+            _setIndex(i);
           },
           destinations: [
             NavigationDestination(
@@ -141,14 +144,19 @@ class _MainShellState extends State<MainShell> {
               label: tr(context, 'হোম', 'Home'),
             ),
             NavigationDestination(
-              icon: const Icon(Icons.sticky_note_2_outlined),
-              selectedIcon: const Icon(Icons.sticky_note_2),
-              label: tr(context, 'নোট', 'Notes'),
+              icon: const Icon(Icons.note_alt_outlined),
+              selectedIcon: const Icon(Icons.note_alt),
+              label: tr(context, 'নোট', 'Note'),
             ),
-            const NavigationDestination(
-              icon: Icon(Icons.cloud_outlined),
-              selectedIcon: Icon(Icons.cloud),
-              label: 'Backup',
+            NavigationDestination(
+              icon: const Icon(Icons.emoji_emotions_outlined),
+              selectedIcon: const Icon(Icons.emoji_emotions),
+              label: tr(context, 'মেজাজ', 'Mood'),
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.spa_outlined),
+              selectedIcon: const Icon(Icons.spa),
+              label: tr(context, 'অভ্যাস', 'Habit'),
             ),
             NavigationDestination(
               icon: const Icon(Icons.menu_rounded),
@@ -215,12 +223,20 @@ class _HomeTab extends StatelessWidget {
         final activeLoans = loans.length;
         final shoppingLeft = shopping.values.where((s) => !s.checked).length;
         final postsList = HiveService.posts.values.toList();
-        final vaultCount = HiveService.vault.length;
 
+        // Counts for the new Mood + Habit category cards.
         final now = DateTime.now();
-        final dateStr = DateFormat('EEEE, d MMM').format(now);
+        final moodCount = HiveService.moods.length;
+        final habitsBox = Hive.box<Habit>('habits');
+        final habitsCount = habitsBox.length;
+        final habitsDueToday = habitsBox
+            .values
+            .where((h) => HabitService.isDueToday(h, today: now))
+            .length;
 
-        final categories = <_GivingliCategoryData>[
+        DateFormat('EEEE, d MMM').format(now);
+
+        final categories = <_GivingliCategoryCardData>[
           _GivingliCategoryCardData(
             title: tr(context, 'উৎপাদনশীলতা', 'Productivity'),
             subtitle: tr(context, '$pendingTodos টি কাজ • $totalNotes টি নোট', '$pendingTodos tasks • $totalNotes notes'),
@@ -237,12 +253,24 @@ class _HomeTab extends StatelessWidget {
             gradient: const [Color(0xFF10B981), Color(0xFF047857)],
             screen: const FinanceHomeScreen(),
           ),
+          // Dedicated Mood card — opens the full Mood page so the user
+          // can write today's reflection and browse history.
           _GivingliCategoryCardData(
-            title: tr(context, 'ব্যক্তিগত', 'Personal'),
-            subtitle: tr(context, 'অভ্যাস • মেজাজ • ভল্ট ($vaultCount)', 'Habits • Mood • Vault ($vaultCount)'),
-            icon: Icons.person_pin_rounded,
-            color: const Color(0xFFEC4899),
-            gradient: const [Color(0xFFEC4899), Color(0xFFBE185D)],
+            title: tr(context, 'মেজাজ', 'Mood'),
+            subtitle: tr(context, '$moodCount টি এন্ট্রি • আজকের প্রতিফলন', '$moodCount entries • log today'),
+            icon: Icons.emoji_emotions_rounded,
+            color: const Color(0xFFF59E0B),
+            gradient: const [Color(0xFFF59E0B), Color(0xFFD97706)],
+            screen: const MoodScreen(),
+          ),
+          // Dedicated Habit card — opens the full Habits page so the user
+          // can manage routines and check off today's habits.
+          _GivingliCategoryCardData(
+            title: tr(context, 'অভ্যাস', 'Habits'),
+            subtitle: tr(context, '$habitsDueToday টি আজ • মোট $habitsCount', '$habitsDueToday today • $habitsCount total'),
+            icon: Icons.spa_rounded,
+            color: const Color(0xFF14B8A6),
+            gradient: const [Color(0xFF14B8A6), Color(0xFF0F766E)],
             screen: const HabitsScreen(),
           ),
           _GivingliCategoryCardData(
@@ -262,6 +290,10 @@ class _HomeTab extends StatelessWidget {
           _Section(tr(context, 'আয়-ব্যয়', 'Finance'), tr(context, 'ব্যালেন্স ও খরচ', 'Balance & spending'), Icons.account_balance_wallet_outlined, AppColors.finance, const FinanceHomeScreen()),
           _Section(tr(context, 'বাকি খাতা', 'Baki Khata'), tr(context, 'ধারের হিসাব', 'Lend & borrow'), Icons.people_outline, AppColors.bakiKhata, const BakiKhataScreen()),
           _Section(tr(context, 'সাবস্ক্রিপশন', 'Subscriptions'), tr(context, 'মাসিক খরচ', 'Active plans'), Icons.subscriptions_outlined, AppColors.subscription, const SubscriptionsScreen()),
+          // Direct Mood + Habit shortcuts — tapping these opens the full
+          // page so the user can record their data with full detail.
+          _Section(tr(context, 'মেজাজ', 'Mood'), tr(context, '$moodCount টি এন্ট্রি • প্রতিফলন', '$moodCount entries • reflect'), Icons.emoji_emotions_outlined, AppColors.mood, const MoodScreen()),
+          _Section(tr(context, 'অভ্যাস', 'Habits'), tr(context, '$habitsDueToday / $habitsCount আজ', '$habitsDueToday / $habitsCount today'), Icons.spa_outlined, AppColors.habits, const HabitsScreen()),
           _Section(tr(context, 'ক্যালকুলেটর', 'Calculator'), tr(context, '৫টি বিভাগ', '5 categories'), Icons.calculate_outlined, AppColors.calculator, const CalculatorHubScreen()),
           _Section(tr(context, 'নামাজ ও কিবলা', 'Prayer & Qibla'), tr(context, 'সময়সূচি ও কম্পাস', 'Schedule & compass'), Icons.mosque_outlined, AppColors.prayer, const PrayerScreen()),
         ];
@@ -289,11 +321,11 @@ class _HomeTab extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(color: AppColors.success.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(999)),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          CircleAvatar(radius: 2.5, backgroundColor: AppColors.success),
-                          SizedBox(width: 4),
-                          Text('• Live', style: TextStyle(color: AppColors.success, fontSize: 9.5, fontWeight: FontWeight.w900)),
+                          const CircleAvatar(radius: 2.5, backgroundColor: AppColors.success),
+                          const SizedBox(width: 4),
+                          Text(tr(context, '• লাইভ', '• Live'), style: const TextStyle(color: AppColors.success, fontSize: 9.5, fontWeight: FontWeight.w900)),
                         ],
                       ),
                     ),
@@ -311,6 +343,54 @@ class _HomeTab extends StatelessWidget {
               ],
             ),
             actions: [
+              ValueListenableBuilder<List<Notice>>(
+                valueListenable: NoticeService.instance.notices,
+                builder: (context, list, _) {
+                  return ValueListenableBuilder<bool>(
+                    valueListenable: NoticeService.instance.configured,
+                    builder: (context, configured, _) {
+                      final showBadge = configured && list.isNotEmpty;
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          IconButton(
+                            tooltip: tr(context, 'নোটিশ', 'Notices'),
+                            icon: const Icon(Icons.notifications_none_rounded),
+                            onPressed: () async {
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => const NoticesScreen()),
+                              );
+                              if (context.mounted) {
+                                // Refresh on return so unread state stays fresh.
+                                NoticeService.instance.refresh();
+                              }
+                            },
+                          ),
+                          if (showBadge)
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                                decoration: BoxDecoration(
+                                  color: AppColors.danger,
+                                  borderRadius: BorderRadius.circular(999),
+                                  border: Border.all(color: scheme.surfaceContainerLow, width: 1.5),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  list.length > 99 ? '99+' : '${list.length}',
+                                  style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, height: 1.1),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
               IconButton(
                 tooltip: tr(context, 'সেটিংস', 'Settings'),
                 icon: const Icon(Icons.settings_outlined),
@@ -328,6 +408,10 @@ class _HomeTab extends StatelessWidget {
               const SizedBox(height: 10),
               _buildQuickShortcutsRow(context, scheme),
               const SizedBox(height: 14),
+
+              // 1b. Mood & Habit sliders — one-tap logging from the dashboard.
+              const DashboardMoodHabitSliders(),
+              const SizedBox(height: 16),
 
               // 2. Active Stories & Broadcast Carousel ("ACTIVE STORIES & BROADCAST")
               _buildHeaderLabel(context, tr(context, 'সক্রিয় গল্প ও পোস্ট ব্রডকাস্ট', 'ACTIVE STORIES & BROADCAST'), onViewAll: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PostsListScreen()))),
@@ -454,13 +538,13 @@ class _HomeTab extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       child: Row(
         children: [
-          _shortcutPill(context, '⚡ Compass', AppColors.prayer, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PrayerScreen()))),
+          _shortcutPill(context, tr(context, '⚡ কম্পাস', '⚡ Compass'), AppColors.prayer, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PrayerScreen()))),
           const SizedBox(width: 8),
-          _shortcutPill(context, '🧮 Calc', AppColors.calculator, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CalculatorHubScreen()))),
+          _shortcutPill(context, tr(context, '🧮 ক্যালকুলেটর', '🧮 Calc'), AppColors.calculator, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CalculatorHubScreen()))),
           const SizedBox(width: 8),
-          _shortcutPill(context, '🔒 Vault', AppColors.vault, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const VaultScreen()))),
+          _shortcutPill(context, tr(context, '🔒 ভল্ট', '🔒 Vault'), AppColors.vault, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const VaultScreen()))),
           const SizedBox(width: 8),
-          _shortcutPill(context, '📝 Note', AppColors.notes, () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: scheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => const SimpleNoteSheet())),
+          _shortcutPill(context, tr(context, '📝 নোট', '📝 Note'), AppColors.notes, () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: scheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => const SimpleNoteSheet())),
         ],
       ),
     );
@@ -548,12 +632,12 @@ class _HomeTab extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(color: AppColors.post.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(6)),
-                          child: Text('⏰ Scheduled', style: const TextStyle(color: AppColors.post, fontSize: 10, fontWeight: FontWeight.w900)),
+                          child: Text(tr(context, '⏰ শিডিউল করা হয়েছে', '⏰ Scheduled'), style: const TextStyle(color: AppColors.post, fontSize: 10, fontWeight: FontWeight.w900)),
                         ),
                         const SizedBox(height: 6),
                         Text(p.title.isEmpty ? p.body : p.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13.5)),
                         const SizedBox(height: 4),
-                        Text('Manage Post ->', style: TextStyle(fontSize: 11, color: scheme.primary, fontWeight: FontWeight.w800)),
+                        Text(tr(context, 'পোস্ট পরিচালনা করুন ->', 'Manage Post ->'), style: TextStyle(fontSize: 11, color: scheme.primary, fontWeight: FontWeight.w800)),
                       ],
                     ),
                   ),
@@ -583,7 +667,7 @@ class _HomeTab extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(color: AppColors.success.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
-                  child: const Text('Auto-post ON', style: TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.w900)),
+                  child: Text(tr(context, 'অটো-পোস্ট চালু', 'Auto-post ON'), style: const TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.w900)),
                 ),
               ],
             ),
@@ -598,20 +682,20 @@ class _HomeTab extends StatelessWidget {
                     children: [
                       const CircleAvatar(radius: 12, backgroundColor: AppColors.primary, child: Icon(Icons.person, color: Colors.white, size: 14)),
                       const SizedBox(width: 8),
-                      const Text('riviera.studio', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5)),
+                      Text(tr(context, 'রিভিয়েরা স্টুডিও', 'riviera.studio'), style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5)),
                       const Spacer(),
                       Icon(Icons.more_horiz, color: scheme.onSurfaceVariant, size: 18),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    topPost?.body.isNotEmpty == true ? topPost!.body : 'Designing tools that spark quiet focus. Our full tactile workspace is live on the journal deck.',
+                    topPost?.body.isNotEmpty == true ? topPost!.body : tr(context, 'এমন টুলস ডিজাইন করা যা শান্ত মনোযোগ জাগায়। আমাদের পূর্ণ ট্যাকটাইল ওয়ার্কস্পেস জার্নাল ডেকে লাইভ।', 'Designing tools that spark quiet focus. Our full tactile workspace is live on the journal deck.'),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 12.5, height: 1.4),
                   ),
                   const SizedBox(height: 6),
-                  Text('#workspace #minimalsetup #utilityhub', style: TextStyle(fontSize: 11, color: scheme.primary, fontWeight: FontWeight.w800)),
+                  Text(tr(context, '#কর্মক্ষেত্র #ন্যূনতমসেটআপ #ইউটিলিটিহাব', '#workspace #minimalsetup #utilityhub'), style: TextStyle(fontSize: 11, color: scheme.primary, fontWeight: FontWeight.w800)),
                 ],
               ),
             ),
@@ -651,8 +735,8 @@ class _HomeTab extends StatelessWidget {
         children: [
           _nibbleCard(
             context,
-            title: tr(context, 'হিস্টোরি লেনদেন', 'Last Calculation'),
-            value: '3,450 + 15% VAT = 3,967.50',
+            title: tr(context, 'শেষ হিসাব', 'Last Calculation'),
+            value: tr(context, '৩,৪৫০ + ১৫% ভ্যাট = ৩,৯৬৭.৫০', '3,450 + 15% VAT = 3,967.50'),
             buttonText: tr(context, 'ক্যালকুলেটর', 'Open Calc'),
             icon: Icons.history_rounded,
             color: AppColors.calculator,
@@ -662,7 +746,7 @@ class _HomeTab extends StatelessWidget {
           _nibbleCard(
             context,
             title: tr(context, 'একক রূপান্তর', 'Unit Conversion'),
-            value: 'USD/EUR \$1.00 = €0.92',
+            value: tr(context, 'ইউএসডি/ইইউআর \$১.০০ = €০.৯২', 'USD/EUR \$1.00 = €0.92'),
             buttonText: tr(context, 'রূপান্তর', 'Convert Units'),
             icon: Icons.straighten,
             color: AppColors.converter,
@@ -731,7 +815,7 @@ class _HomeTab extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(tr(context, 'প্রধান কাজ সমূহ', 'PRIORITY TASKS'), style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15)),
                 const Spacer(),
-                Text('$completed of $total Done', style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w800)),
+                Text(tr(context, '$completed / $total সম্পন্ন', '$completed of $total Done'), style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w800)),
               ],
             ),
             const SizedBox(height: 12),
@@ -791,7 +875,7 @@ class _HomeTab extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(color: AppColors.finance.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
-                  child: const Text('Net Liquidity', style: TextStyle(color: AppColors.finance, fontSize: 11, fontWeight: FontWeight.w900)),
+                  child: Text(tr(context, 'নিট তারল্য', 'Net Liquidity'), style: const TextStyle(color: AppColors.finance, fontSize: 11, fontWeight: FontWeight.w900)),
                 ),
               ],
             ),
@@ -835,11 +919,11 @@ class _HomeTab extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(tr(context, 'দৈনিক ভাবনা ও জার্নাল', 'MINDFUL JOURNAL'), style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15)),
                 const Spacer(),
-                Text('$notesCount Notes', style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w800)),
+                Text(tr(context, '$notesCount টি নোট', '$notesCount Notes'), style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w800)),
               ],
             ),
             const SizedBox(height: 8),
-            Text('"What creative boundary did you explore today?"', style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: scheme.onSurfaceVariant)),
+            Text(tr(context, '"আজ আপনি কোন সৃজনশীল সীমানা অন্বেষণ করলেন?"', '"What creative boundary did you explore today?"'), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: scheme.onSurfaceVariant)),
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
@@ -947,14 +1031,14 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _GivingliCategoryData {
+class _GivingliCategoryCardData {
   final String title;
   final String subtitle;
   final IconData icon;
   final Color color;
   final List<Color> gradient;
   final Widget screen;
-  _GivingliCategoryCardData({
+  const _GivingliCategoryCardData({
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -963,8 +1047,6 @@ class _GivingliCategoryData {
     required this.screen,
   });
 }
-
-typedef _GivingliCategoryCardData = _GivingliCategoryData;
 
 class _GivingliCategoryCard extends StatelessWidget {
   final String title;
@@ -1095,29 +1177,35 @@ class _GlobalAppSearchDelegate extends SearchDelegate<String?> {
 
   Widget _buildSearchResults(BuildContext context) {
     final q = query.trim().toLowerCase();
+    final isBn = Localizations.localeOf(context).languageCode == 'bn';
     final allFeatures = <_FeatureItem>[
-      _FeatureItem('Todo & Tasks', 'Manage daily checklists and tasks', Icons.check_circle_outline, AppColors.todo, const TodoListScreen()),
-      _FeatureItem('Notes & Khata', 'Write ideas and notes', Icons.sticky_note_2_outlined, AppColors.notes, const NotesListScreen()),
-      _FeatureItem('Posts & Broadcast', 'Creative blog posts & social feeds', Icons.style_outlined, AppColors.post, const PostsListScreen()),
-      _FeatureItem('Finance Tracker', 'Track income and spending', Icons.account_balance_wallet_outlined, AppColors.finance, const FinanceHomeScreen()),
-      _FeatureItem('Baki Khata', 'Track lend and borrow debts', Icons.people_outline, AppColors.bakiKhata, const BakiKhataScreen()),
-      _FeatureItem('Loan Manager', 'Active loans and installments', Icons.credit_card_outlined, AppColors.loan, const LoanScreen()),
-      _FeatureItem('Calculators', '5 categories of general & finance calculators', Icons.calculate_outlined, AppColors.calculator, const CalculatorHubScreen()),
-      _FeatureItem('Unit Converter', 'Length, weight, temperature, volume', Icons.straighten, AppColors.converter, const UnitConverterScreen()),
-      _FeatureItem('Shopping List', 'Groceries and buy lists', Icons.shopping_cart_outlined, AppColors.shopping, const ShoppingListScreen()),
-      _FeatureItem('Habit Tracker', 'Daily routines and streaks', Icons.spa_outlined, AppColors.habits, const HabitsScreen()),
-      _FeatureItem('Mood Reflector', 'Daily mood entries and patterns', Icons.emoji_emotions_outlined, AppColors.mood, const MoodScreen()),
-      _FeatureItem('Password Vault', 'Secure local credentials', Icons.lock_outline, AppColors.vault, const VaultScreen()),
-      _FeatureItem('Daily Quiz', 'Test your knowledge daily', Icons.psychology_outlined, AppColors.quiz, const QuizScreen()),
-      _FeatureItem('Date Tools', 'Age calculator and day countdowns', Icons.event_outlined, AppColors.dateTools, const DateToolsScreen()),
-      _FeatureItem('Reminders', 'All scheduled reminders', Icons.alarm_outlined, AppColors.reminders, const RemindersScreen()),
-      _FeatureItem('Prayer Times & Qibla', 'Prayer times and live compass', Icons.mosque_outlined, AppColors.prayer, const PrayerScreen()),
-      _FeatureItem('History', 'Calculations and transactions log', Icons.history_rounded, AppColors.primary, const HistoryScreen()),
+      _FeatureItem('কাজ ও টাস্ক', 'Todo & Tasks', 'দৈনিক চেকলিস্ট ও কাজ পরিচালনা', 'Manage daily checklists and tasks', Icons.check_circle_outline, AppColors.todo, const TodoListScreen()),
+      _FeatureItem('নোট ও খাতা', 'Notes & Khata', 'ধারণা ও নোট লিখুন', 'Write ideas and notes', Icons.sticky_note_2_outlined, AppColors.notes, const NotesListScreen()),
+      _FeatureItem('পোস্ট ও ব্রডকাস্ট', 'Posts & Broadcast', 'সৃজনশীল ব্লগ পোস্ট ও সোশ্যাল ফিড', 'Creative blog posts & social feeds', Icons.style_outlined, AppColors.post, const PostsListScreen()),
+      _FeatureItem('আয়-ব্যয় ট্র্যাকার', 'Finance Tracker', 'আয় ও ব্যয়ের হিসাব রাখুন', 'Track income and spending', Icons.account_balance_wallet_outlined, AppColors.finance, const FinanceHomeScreen()),
+      _FeatureItem('বাকি খাতা', 'Baki Khata', 'ধার-দেনার হিসাব', 'Track lend and borrow debts', Icons.people_outline, AppColors.bakiKhata, const BakiKhataScreen()),
+      _FeatureItem('লোন ম্যানেজার', 'Loan Manager', 'চলমান লোন ও কিস্তি', 'Active loans and installments', Icons.credit_card_outlined, AppColors.loan, const LoanScreen()),
+      _FeatureItem('ক্যালকুলেটর', 'Calculators', 'সাধারণ ও আর্থিক ক্যালকুলেটর ৫টি বিভাগ', '5 categories of general & finance calculators', Icons.calculate_outlined, AppColors.calculator, const CalculatorHubScreen()),
+      _FeatureItem('একক রূপান্তর', 'Unit Converter', 'দৈর্ঘ্য, ওজন, তাপমাত্রা, আয়তন', 'Length, weight, temperature, volume', Icons.straighten, AppColors.converter, const UnitConverterScreen()),
+      _FeatureItem('শপিং তালিকা', 'Shopping List', 'মুদি ও কেনাকাটার তালিকা', 'Groceries and buy lists', Icons.shopping_cart_outlined, AppColors.shopping, const ShoppingListScreen()),
+      _FeatureItem('অভ্যাস ট্র্যাকার', 'Habit Tracker', 'দৈনিক রুটিন ও স্ট্রিক', 'Daily routines and streaks', Icons.spa_outlined, AppColors.habits, const HabitsScreen()),
+      _FeatureItem('মেজাজ ট্র্যাকার', 'Mood Reflector', 'দৈনিক মেজাজ এন্ট্রি ও প্যাটার্ন', 'Daily mood entries and patterns', Icons.emoji_emotions_outlined, AppColors.mood, const MoodScreen()),
+      _FeatureItem('পাসওয়ার্ড ভল্ট', 'Password Vault', 'নিরাপদ লোকাল ক্রেডেনশিয়াল', 'Secure local credentials', Icons.lock_outline, AppColors.vault, const VaultScreen()),
+      _FeatureItem('দৈনিক কুইজ', 'Daily Quiz', 'প্রতিদিন জ্ঞান যাচাই', 'Test your knowledge daily', Icons.psychology_outlined, AppColors.quiz, const QuizCategoriesScreen()),
+      _FeatureItem('তারিখ টুলস', 'Date Tools', 'বয়স ক্যালকুলেটর ও কাউন্টডাউন', 'Age calculator and day countdowns', Icons.event_outlined, AppColors.dateTools, const DateToolsScreen()),
+      _FeatureItem('রিমাইন্ডার', 'Reminders', 'সব নির্ধারিত রিমাইন্ডার', 'All scheduled reminders', Icons.alarm_outlined, AppColors.reminders, const RemindersScreen()),
+      _FeatureItem('নামাজ ও কিবলা', 'Prayer Times & Qibla', 'নামাজের সময় ও লাইভ কম্পাস', 'Prayer times and live compass', Icons.mosque_outlined, AppColors.prayer, const PrayerScreen()),
+      _FeatureItem('ইতিহাস', 'History', 'ক্যালকুলেশন ও লেনদেনের লগ', 'Calculations and transactions log', Icons.history_rounded, AppColors.primary, const HistoryScreen()),
     ];
 
     final filtered = q.isEmpty
         ? allFeatures
-        : allFeatures.where((f) => f.title.toLowerCase().contains(q) || f.subtitle.toLowerCase().contains(q)).toList();
+        : allFeatures.where((f) {
+            return f.titleBn.toLowerCase().contains(q) ||
+                f.titleEn.toLowerCase().contains(q) ||
+                f.subtitleBn.toLowerCase().contains(q) ||
+                f.subtitleEn.toLowerCase().contains(q);
+          }).toList();
 
     if (filtered.isEmpty) {
       return Center(
@@ -1132,6 +1220,8 @@ class _GlobalAppSearchDelegate extends SearchDelegate<String?> {
       itemCount: filtered.length,
       itemBuilder: (context, i) {
         final f = filtered[i];
+        final title = isBn ? f.titleBn : f.titleEn;
+        final subtitle = isBn ? f.subtitleBn : f.subtitleEn;
         return ListTile(
           leading: Container(
             width: 40,
@@ -1140,8 +1230,8 @@ class _GlobalAppSearchDelegate extends SearchDelegate<String?> {
             decoration: BoxDecoration(color: f.color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
             child: Icon(f.icon, color: f.color),
           ),
-          title: Text(f.title, style: const TextStyle(fontWeight: FontWeight.w800)),
-          subtitle: Text(f.subtitle),
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+          subtitle: Text(subtitle),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             close(context, null);
@@ -1153,13 +1243,24 @@ class _GlobalAppSearchDelegate extends SearchDelegate<String?> {
   }
 }
 
-class _FeatureItem {
+class _Section {
   final String title;
   final String subtitle;
   final IconData icon;
   final Color color;
   final Widget screen;
-  _FeatureItem(this.title, this.subtitle, this.icon, this.color, this.screen);
+  const _Section(this.title, this.subtitle, this.icon, this.color, this.screen);
+}
+
+class _FeatureItem {
+  final String titleBn;
+  final String titleEn;
+  final String subtitleBn;
+  final String subtitleEn;
+  final IconData icon;
+  final Color color;
+  final Widget screen;
+  _FeatureItem(this.titleBn, this.titleEn, this.subtitleBn, this.subtitleEn, this.icon, this.color, this.screen);
 }
 
 // ============================================================================
@@ -1221,10 +1322,13 @@ class _NotesTab extends StatelessWidget {
           },
         ),
       ),
+      // The Note tab opens the FULL note editor directly so users can
+      // start writing with one tap. The Quick Note (SimpleNoteSheet) is
+      // still available from the center + add sheet.
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.notes,
-        onPressed: () => showModalBottomSheet(context: context, isScrollControlled: true, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => const SimpleNoteSheet()),
-        child: const Icon(Icons.add),
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NoteEditorScreen())),
+        child: const Icon(Icons.edit_outlined),
       ),
     );
   }
@@ -1415,31 +1519,30 @@ class _KeepNoteCard extends StatelessWidget {
 }
 
 // ============================================================================
-// BACKUP TAB
+// MOOD TAB — embeds the dedicated Mood screen directly into the navbar so
+// users see the full page instantly (no "Opening…" placeholder, no stack
+// juggling). MoodScreen already brings its own AppBar + tabs.
 // ============================================================================
 
-class _BackupTab extends StatelessWidget {
-  const _BackupTab();
+class _MoodTab extends StatelessWidget {
+  const _MoodTab();
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      drawer: const AppDrawer(),
-      backgroundColor: scheme.surfaceContainerLow,
-      appBar: AppBar(
-        backgroundColor: scheme.surfaceContainerLow,
-        leading: Builder(
-          builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu),
-            tooltip: tr(context, 'মেনু', 'Menu'),
-            onPressed: () => Scaffold.of(ctx).openDrawer(),
-          ),
-        ),
-        title: Text(tr(context, 'ব্যাকআপ', 'Backup'), style: Theme.of(context).textTheme.headlineSmall),
-      ),
-      body: const BackupScreen(embedded: true),
-    );
+    return const MoodScreen();
+  }
+}
+
+// ============================================================================
+// HABIT TAB — embeds the dedicated Habits screen directly into the navbar.
+// ============================================================================
+
+class _HabitTab extends StatelessWidget {
+  const _HabitTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return const HabitsScreen();
   }
 }
 

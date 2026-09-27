@@ -53,7 +53,7 @@ class LocalBackupService {
   /// Build the JSON payload in memory.
   Map<String, dynamic> _exportPayload() {
     return {
-      'version': 3,
+      'version': 4,
       'exportedAt': DateTime.now().toIso8601String(),
       'boxes': {
         'todos': HiveService.todos.values.map(_todoToJson).toList(),

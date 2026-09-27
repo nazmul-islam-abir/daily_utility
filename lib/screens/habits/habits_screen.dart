@@ -33,10 +33,11 @@ class _HabitsScreenState extends State<HabitsScreen> {
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
         return Scaffold(
-          appBar: AppBar(title: Text(tr(context, 'অভ্যাস', 'Habits'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900))),
+          backgroundColor: scheme.surfaceContainerLow,
+          appBar: AppBar(title: Text(tr(context, 'অভ্যাস', 'Habits'))),
           floatingActionButton: FloatingActionButton(
             backgroundColor: AppColors.habits,
-            onPressed: () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: AppColors.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => const HabitEditorSheet()),
+            onPressed: () => _addHabit(context),
             child: const Icon(Icons.add),
           ),
           body: ValueListenableBuilder(
@@ -51,7 +52,22 @@ class _HabitsScreenState extends State<HabitsScreen> {
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                      child: Row(
+                        children: [
+                          Icon(Icons.spa_outlined, size: 16, color: scheme.onSurfaceVariant),
+                          const SizedBox(width: 6),
+                          Text(
+                            tr(context, '${habits.length} টি অভ্যাস', '${habits.length} habits'),
+                            style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
                       child: Row(
                         children: [
                           Expanded(child: _statTile(tr(context, 'বর্তমান ধারা', 'CURRENT STREAK'), '$longestStreak', tr(context, 'দিন', 'days'), AppColors.habits)),
@@ -66,7 +82,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
                       padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
                       child: Row(
                         children: [
-                          Text(tr(context, 'সাপ্তাহিক ভিউ', 'Weekly View'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                          Text(tr(context, 'সাপ্তাহিক ভিউ', 'Weekly View'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface)),
                           const Spacer(),
                           Text(_weekRange(today), style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant)),
                         ],
@@ -84,7 +100,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
                       padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
                       child: Row(
                         children: [
-                          Text(tr(context, 'আজকের অভ্যাস', "Today's Habits"), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                          Text(tr(context, 'আজকের অভ্যাস', "Today's Habits"), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface)),
                           const Spacer(),
                           TextButton.icon(onPressed: () => _addHabit(context), icon: const Icon(Icons.add, size: 16), label: Text(tr(context, 'নতুন', 'New'))),
                         ],
@@ -230,6 +246,7 @@ class _HabitRow extends StatelessWidget {
     final color = Color(habit.colorValue);
     final icon = _iconFromCode(habit.iconCodePoint);
     return PressableCard(
+      color: scheme.surface,
       onTap: () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: scheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => HabitEditorSheet(existing: habit)),
       onLongPress: () async {
         final ok = await confirmDelete(context, title: tr(context, 'অভ্যাস মুছবেন?', 'Delete habit?'));

@@ -405,6 +405,7 @@ class _PressableCardState extends State<PressableCard> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return AnimatedScale(
       scale: _pressed ? 0.97 : 1.0,
       duration: AppAnimations.fast,
@@ -419,7 +420,7 @@ class _PressableCardState extends State<PressableCard> {
           margin: widget.margin,
           padding: widget.padding,
           decoration: BoxDecoration(
-            color: widget.color ?? AppColors.surface,
+            color: widget.color ?? scheme.surface,
             borderRadius: BorderRadius.circular(widget.radius),
             boxShadow: widget.shadow,
             border: widget.border,
@@ -442,6 +443,7 @@ class FilterChipsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return SizedBox(
       height: 42,
       child: ListView.separated(
@@ -457,10 +459,10 @@ class FilterChipsRow extends StatelessWidget {
             selected: isSel,
             showCheckmark: false,
             onSelected: (_) => onSelect(isSel ? null : label),
-            selectedColor: AppColors.text,
-            backgroundColor: AppColors.surface,
+            selectedColor: scheme.onSurface,
+            backgroundColor: scheme.surface,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-            labelStyle: TextStyle(color: isSel ? Colors.white : AppColors.text, fontWeight: FontWeight.w800, fontSize: 12.5),
+            labelStyle: TextStyle(color: isSel ? scheme.surface : scheme.onSurface, fontWeight: FontWeight.w800, fontSize: 12.5),
           );
         },
       ),

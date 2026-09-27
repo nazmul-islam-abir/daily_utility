@@ -10,8 +10,8 @@ import 'mood_entries_screen.dart';
 import 'mood_logger_screen.dart';
 import 'mood_stats_screen.dart';
 
-/// Mood screen — design #7/#3. Holds its own 4-tab sub-navigation
-/// (Entries / Mood / Stats / Settings) matching the reference.
+/// Mood screen — Daily Reflect. Uses top TabBar navigation embedded in AppBar
+/// to avoid double bottom navigation bars.
 class MoodScreen extends StatefulWidget {
   const MoodScreen({super.key});
 
@@ -19,78 +19,109 @@ class MoodScreen extends StatefulWidget {
   State<MoodScreen> createState() => _MoodScreenState();
 }
 
-class _MoodScreenState extends State<MoodScreen> {
-  int _tab = 1; // default to the logger (Mood)
+class _MoodScreenState extends State<MoodScreen> with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this, initialIndex: 1);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
         return Scaffold(
-          backgroundColor: AppColors.bg,
+          backgroundColor: scheme.surfaceContainerLow,
           appBar: AppBar(
-            backgroundColor: AppColors.bg,
-            title: Text(tr(context, 'মেজাজ', 'Daily Reflect'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
-            actions: [
-              IconButton(icon: const Icon(Icons.account_circle_outlined), onPressed: () {}),
-            ],
+            title: Text(tr(context, 'মেজাজ', 'Daily Reflect')),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(48),
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  indicator: BoxDecoration(
+                    color: AppColors.mood,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: scheme.onSurfaceVariant,
+                  labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                  unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                  padding: const EdgeInsets.all(3),
+                  tabs: [
+                    Tab(text: tr(context, 'এন্ট্রি', 'Entries')),
+                    Tab(text: tr(context, 'মেজাজ', 'Mood')),
+                    Tab(text: tr(context, 'পরিসংখ্যান', 'Stats')),
+                    Tab(text: tr(context, 'সেটিংস', 'Settings')),
+                  ],
+                ),
+              ),
+            ),
           ),
-          body: AnimatedSwitcher(
-            duration: AppAnimations.medium,
-            switchInCurve: AppAnimations.curve,
-            switchOutCurve: AppAnimations.curve,
-            child: _buildTab(_tab),
-          ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: _tab,
-            backgroundColor: AppColors.surface,
-            indicatorColor: AppColors.mood.withValues(alpha: 0.18),
-            onDestinationSelected: (i) => setState(() => _tab = i),
-            destinations: [
-              NavigationDestination(icon: const Icon(Icons.notes_outlined), selectedIcon: Icon(Icons.notes, color: AppColors.mood), label: tr(context, 'এন্ট্রি', 'Entries')),
-              NavigationDestination(icon: const Icon(Icons.emoji_emotions_outlined), selectedIcon: Icon(Icons.emoji_emotions, color: AppColors.mood), label: tr(context, 'মেজাজ', 'Mood')),
-              NavigationDestination(icon: const Icon(Icons.bar_chart_outlined), selectedIcon: Icon(Icons.bar_chart, color: AppColors.mood), label: tr(context, 'পরিসংখ্যান', 'Stats')),
-              NavigationDestination(icon: const Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings, color: AppColors.mood), label: tr(context, 'সেটিংস', 'Settings')),
+          body: TabBarView(
+            controller: _tabController,
+            children: const [
+              MoodEntriesScreen(),
+              MoodLoggerScreen(),
+              MoodStatsScreen(),
+              _MoodSettings(),
             ],
           ),
         );
       },
     );
   }
-
-  Widget _buildTab(int i) {
-    switch (i) {
-      case 0:
-        return const KeyedSubtree(key: ValueKey('entries'), child: MoodEntriesScreen());
-      case 1:
-        return const KeyedSubtree(key: ValueKey('logger'), child: MoodLoggerScreen());
-      case 2:
-        return const KeyedSubtree(key: ValueKey('stats'), child: MoodStatsScreen());
-      default:
-        return KeyedSubtree(key: const ValueKey('settings'), child: _MoodSettings());
-    }
-  }
 }
 
 class _MoodSettings extends StatelessWidget {
+  const _MoodSettings();
+
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
         Card(
+          color: scheme.surface,
           child: ListTile(
             leading: const Icon(Icons.notifications_outlined, color: AppColors.primary),
-            title: Text(tr(context, 'দৈনিক রিমাইন্ডার', 'Daily reminder'), style: const TextStyle(fontWeight: FontWeight.w700)),
-            subtitle: Text(tr(context, 'প্রতিদিন রাত ৯টায় লেখার কথা মনে করিয়ে দিন', 'Remind me to write at 9 PM every day')),
+            title: Text(
+              tr(context, 'দৈনিক রিমাইন্ডার', 'Daily reminder'),
+              style: TextStyle(fontWeight: FontWeight.w700, color: scheme.onSurface),
+            ),
+            subtitle: Text(
+              tr(context, 'প্রতিদিন রাত ৯টায় লেখার কথা মনে করিয়ে দিন', 'Remind me to write at 9 PM every day'),
+              style: TextStyle(color: scheme.onSurfaceVariant),
+            ),
           ),
         ),
         const SizedBox(height: 8),
         Card(
+          color: scheme.surface,
           child: ListTile(
             leading: const Icon(Icons.delete_outline, color: AppColors.danger),
-            title: Text(tr(context, 'সব এন্ট্রি মুছুন', 'Delete all entries'), style: const TextStyle(fontWeight: FontWeight.w700)),
+            title: Text(
+              tr(context, 'সব এন্ট্রি মুছুন', 'Delete all entries'),
+              style: TextStyle(fontWeight: FontWeight.w700, color: scheme.onSurface),
+            ),
             onTap: () async {
               final ok = await confirmDelete(context, title: tr(context, 'সব এন্ট্রি মুছবেন?', 'Delete every entry?'));
               if (ok) await HiveService.moods.clear();

@@ -6,7 +6,9 @@
       "Bash(flutter build:*)",
       "Bash(dir:*)",
       "Bash(flutter run:*)",
-      "Bash(flutter --version)"
+      "Bash(flutter --version)",
+      "Bash(flutter pub:*)",
+      "WebSearch"
     ]
   }
 }

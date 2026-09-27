@@ -18,14 +18,14 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
         return Scaffold(
-          backgroundColor: AppColors.bg,
+          backgroundColor: scheme.surfaceContainerLow,
           appBar: AppBar(
-            backgroundColor: AppColors.bg,
-            title: Text(tr(context, 'একক রূপান্তর', 'Unit Converter'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+            title: Text(tr(context, 'একক রূপান্তর', 'Unit Converter')),
           ),
           body: Column(
             children: [
@@ -82,10 +82,14 @@ class _TabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(AppRadius.lg)),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
       child: Row(
         children: List.generate(tabs.length, (i) {
           final sel = i == index;
@@ -97,13 +101,28 @@ class _TabBar extends StatelessWidget {
                 duration: AppAnimations.fast,
                 curve: AppAnimations.curve,
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: sel ? AppColors.surface : Colors.transparent, borderRadius: BorderRadius.circular(AppRadius.md), boxShadow: sel ? AppShadows.soft(AppColors.converter) : []),
+                decoration: BoxDecoration(
+                  color: sel ? scheme.surface : Colors.transparent,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  boxShadow: sel ? AppShadows.soft(AppColors.converter) : [],
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(t.icon, size: 18, color: sel ? AppColors.converter : AppColors.textMuted),
+                    Icon(
+                      t.icon,
+                      size: 18,
+                      color: sel ? AppColors.converter : scheme.onSurfaceVariant,
+                    ),
                     const SizedBox(height: 4),
-                    Text(tr(context, t.bn, t.en), style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: sel ? AppColors.text : AppColors.textMuted)),
+                    Text(
+                      tr(context, t.bn, t.en),
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w800,
+                        color: sel ? scheme.onSurface : scheme.onSurfaceVariant,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -145,10 +164,14 @@ class _ConverterPanelState extends State<_ConverterPanel> {
 
   List<_Unit> get _units {
     switch (widget.category) {
-      case _Category.length: return _length;
-      case _Category.weight: return _weight;
-      case _Category.temp: return _temp;
-      case _Category.volume: return _volume;
+      case _Category.length:
+        return _length;
+      case _Category.weight:
+        return _weight;
+      case _Category.temp:
+        return _temp;
+      case _Category.volume:
+        return _volume;
     }
   }
 
@@ -190,6 +213,7 @@ class _ConverterPanelState extends State<_ConverterPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final v = double.tryParse(_value.text) ?? 0;
     final result = _convert(v);
     final units = _units;
@@ -212,8 +236,12 @@ class _ConverterPanelState extends State<_ConverterPanel> {
               curve: AppAnimations.curve,
               turns: _swapRotation,
               child: Container(
-                width: 48, height: 48,
-                decoration: BoxDecoration(color: AppColors.converter.withValues(alpha: 0.14), shape: BoxShape.circle),
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.converter.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                ),
                 child: const Icon(Icons.swap_vert, color: AppColors.converter),
               ),
             ),
@@ -231,12 +259,22 @@ class _ConverterPanelState extends State<_ConverterPanel> {
         const SizedBox(height: 20),
         Container(
           padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
-          child: Row(children: [
-            const Icon(Icons.info_outline, size: 18, color: AppColors.textMuted),
-            const SizedBox(width: 8),
-            Expanded(child: Text(tr(context, 'ফলাফল স্বয়ংক্রিয়ভাবে হিসাব হয়।', 'Result updates instantly as you type.'), style: const TextStyle(fontSize: 12.5, color: AppColors.textMuted))),
-          ]),
+          decoration: BoxDecoration(
+            color: scheme.surface,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.info_outline, size: 18, color: scheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  tr(context, 'ফলাফল স্বয়ংক্রিয়ভাবে হিসাব হয়।', 'Result updates instantly as you type.'),
+                  style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -258,34 +296,79 @@ class _ValueCard extends StatelessWidget {
   final String? displayValue;
   final ValueChanged<int> onUnitChange;
   final bool readOnly;
-  const _ValueCard({required this.title, required this.units, required this.selectedIndex, required this.onUnitChange, this.controller, this.displayValue, this.readOnly = false});
+  const _ValueCard({
+    required this.title,
+    required this.units,
+    required this.selectedIndex,
+    required this.onUnitChange,
+    this.controller,
+    this.displayValue,
+    this.readOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final unit = units[selectedIndex];
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(gradient: LinearGradient(colors: AppColors.cardGradient(AppColors.converter)), borderRadius: BorderRadius.circular(AppRadius.xl)),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.soft(AppColors.converter),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MiniSectionLabel(title),
           const SizedBox(height: 12),
           if (readOnly)
-            Text(displayValue ?? '0', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: AppColors.text))
+            Text(
+              displayValue ?? '0',
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.w900,
+                color: scheme.onSurface,
+              ),
+            )
           else
             TextField(
               controller: controller,
               keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: AppColors.text),
-              decoration: const InputDecoration(border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero, isDense: true),
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.w900,
+                color: scheme.onSurface,
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                filled: false,
+                contentPadding: EdgeInsets.zero,
+                isDense: true,
+                hintText: '0',
+                hintStyle: TextStyle(color: scheme.onSurfaceVariant, fontSize: 36, fontWeight: FontWeight.w900),
+              ),
             ),
           const SizedBox(height: 8),
           _UnitDropdown(units: units, selectedIndex: selectedIndex, onSelect: onUnitChange),
           const SizedBox(height: 8),
-          Row(children: [
-            Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), decoration: BoxDecoration(color: AppColors.converter.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(AppRadius.sm)), child: Text(unit.symbol, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.converter))),
-          ]),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppColors.converter.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+                child: Text(
+                  unit.symbol,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.converter),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -300,25 +383,47 @@ class _UnitDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return PopupMenuButton<int>(
       onSelected: onSelect,
+      color: scheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
       itemBuilder: (ctx) => [
         for (int i = 0; i < units.length; i++)
           PopupMenuItem(
             value: i,
-            child: Row(children: [
-              Container(width: 8, height: 8, decoration: BoxDecoration(color: i == selectedIndex ? AppColors.converter : AppColors.line, shape: BoxShape.circle)),
-              const SizedBox(width: 10),
-              Text(tr(context, units[i].bn, units[i].en), style: const TextStyle(fontWeight: FontWeight.w700)),
-              const SizedBox(width: 6),
-              Text('(${units[i].symbol})', style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
-            ]),
+            child: Row(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: i == selectedIndex ? AppColors.converter : scheme.outline,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  tr(context, units[i].bn, units[i].en),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(width: 6),
+                Text('(${units[i].symbol})', style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12)),
+              ],
+            ),
           ),
       ],
-      child: Row(children: [
-        Expanded(child: Text(tr(context, units[selectedIndex].bn, units[selectedIndex].en), style: const TextStyle(fontSize: 14, color: AppColors.textMuted, fontWeight: FontWeight.w700))),
-        const Icon(Icons.expand_more, color: AppColors.textMuted),
-      ]),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              tr(context, units[selectedIndex].bn, units[selectedIndex].en),
+              style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700),
+            ),
+          ),
+          Icon(Icons.expand_more, color: scheme.onSurfaceVariant),
+        ],
+      ),
     );
   }
 }
@@ -338,16 +443,27 @@ double _convertWeight(double v, int from, int to) {
 double _convertTemp(double v, int from, int to) {
   double c;
   switch (from) {
-    case 0: c = v; break;
-    case 1: c = (v - 32) * 5 / 9; break;
-    case 2: c = v - 273.15; break;
-    default: c = v;
+    case 0:
+      c = v;
+      break;
+    case 1:
+      c = (v - 32) * 5 / 9;
+      break;
+    case 2:
+      c = v - 273.15;
+      break;
+    default:
+      c = v;
   }
   switch (to) {
-    case 0: return c;
-    case 1: return c * 9 / 5 + 32;
-    case 2: return c + 273.15;
-    default: return c;
+    case 0:
+      return c;
+    case 1:
+      return c * 9 / 5 + 32;
+    case 2:
+      return c + 273.15;
+    default:
+      return c;
   }
 }
 

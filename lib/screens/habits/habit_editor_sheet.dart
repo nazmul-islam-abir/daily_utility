@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../../models/habit.dart';
 import '../../services/hive_service.dart';
 import '../../services/locale_service.dart';
-import '../../theme/app_theme.dart';
 
 const _uuid = Uuid();
 
@@ -14,9 +13,21 @@ IconData _iconFromCode(int cp) {
 }
 
 const _kIconChoices = [
-  Icons.spa_outlined, Icons.self_improvement, Icons.local_drink_outlined, Icons.directions_run, Icons.book_outlined,
-  Icons.bedtime_outlined, Icons.fitness_center, Icons.brush_outlined, Icons.music_note_outlined, Icons.savings_outlined,
-  Icons.restaurant_outlined, Icons.code, Icons.headphones, Icons.directions_bike, Icons.pool,
+  Icons.spa_outlined,
+  Icons.self_improvement,
+  Icons.local_drink_outlined,
+  Icons.directions_run,
+  Icons.book_outlined,
+  Icons.bedtime_outlined,
+  Icons.fitness_center,
+  Icons.brush_outlined,
+  Icons.music_note_outlined,
+  Icons.savings_outlined,
+  Icons.restaurant_outlined,
+  Icons.code,
+  Icons.headphones,
+  Icons.directions_bike,
+  Icons.pool,
 ];
 
 const _kColorChoices = [
@@ -92,95 +103,122 @@ class _HabitEditorSheetState extends State<HabitEditorSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(20, 12, 20, bottom + 24),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(child: Container(width: 36, height: 4, decoration: BoxDecoration(color: AppColors.line, borderRadius: BorderRadius.circular(2)))),
-                const SizedBox(height: 14),
-                Text(widget.existing == null ? tr(context, 'নতুন অভ্যাস', 'New habit') : tr(context, 'সম্পাদনা', 'Edit'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 14),
-                TextField(controller: _title, autofocus: true, decoration: InputDecoration(labelText: tr(context, 'শিরোনাম', 'Title'))),
-                const SizedBox(height: 10),
-                TextField(controller: _subtitle, decoration: InputDecoration(labelText: tr(context, 'বিবরণ (ঐচ্ছিক)', 'Subtitle (optional)'))),
-                const SizedBox(height: 16),
-                Text(tr(context, 'আইকন', 'Icon'), style: const TextStyle(fontWeight: FontWeight.w800)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: _kIconChoices.map((i) {
-                    final sel = i.codePoint == _icon.codePoint;
-                    return GestureDetector(
-                      onTap: () => setState(() => _icon = i),
-                      child: Container(
-                        width: 40, height: 40, alignment: Alignment.center,
-                        decoration: BoxDecoration(color: sel ? Color(_colorValue).withValues(alpha: 0.18) : AppColors.surfaceAlt, shape: BoxShape.circle),
-                        child: Icon(i, color: sel ? Color(_colorValue) : AppColors.textMuted, size: 20),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 16),
-                Text(tr(context, 'রঙ', 'Color'), style: const TextStyle(fontWeight: FontWeight.w800)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 10,
-                  children: _kColorChoices.map((c) {
-                    return GestureDetector(
-                      onTap: () => setState(() => _colorValue = c),
-                      child: Container(
-                        width: 28, height: 28,
-                        decoration: BoxDecoration(color: Color(c), shape: BoxShape.circle),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 16),
-                Text(tr(context, 'পুনরাবৃত্তি', 'Recurrence'), style: const TextStyle(fontWeight: FontWeight.w800)),
-                const SizedBox(height: 8),
-                SegmentedButton<String>(
-                  segments: [
-                    ButtonSegment(value: 'daily', label: Text(tr(context, 'প্রতিদিন', 'Daily'))),
-                    ButtonSegment(value: 'weekly', label: Text(tr(context, 'সাপ্তাহিক', 'Weekly'))),
-                  ],
-                  selected: {_recurrence},
-                  onSelectionChanged: (s) => setState(() => _recurrence = s.first),
-                ),
-                if (_recurrence == 'weekly') ...[
-                  const SizedBox(height: 12),
+        return Container(
+          color: scheme.surface,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 12, 20, bottom + 24),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(color: scheme.outline, borderRadius: BorderRadius.circular(2)),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    widget.existing == null ? tr(context, 'নতুন অভ্যাস', 'New habit') : tr(context, 'সম্পাদনা', 'Edit'),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface),
+                  ),
+                  const SizedBox(height: 14),
+                  TextField(
+                    controller: _title,
+                    autofocus: true,
+                    decoration: InputDecoration(labelText: tr(context, 'শিরোনাম', 'Title')),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _subtitle,
+                    decoration: InputDecoration(labelText: tr(context, 'বিবরণ (ঐচ্ছিক)', 'Subtitle (optional)')),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(tr(context, 'আইকন', 'Icon'), style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurface)),
+                  const SizedBox(height: 8),
                   Wrap(
-                    spacing: 6,
-                    children: [
-                      for (int dow = 1; dow <= 7; dow++)
-                        FilterChip(
-                          label: Text(['M', 'T', 'W', 'T', 'F', 'S', 'S'][dow - 1]),
-                          selected: _days.contains(dow),
-                          showCheckmark: false,
-                          onSelected: (v) => setState(() => v ? _days.add(dow) : _days.remove(dow)),
-                          selectedColor: Color(_colorValue).withValues(alpha: 0.2),
-                          labelStyle: TextStyle(color: _days.contains(dow) ? Color(_colorValue) : AppColors.text, fontWeight: FontWeight.w800),
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _kIconChoices.map((i) {
+                      final sel = i.codePoint == _icon.codePoint;
+                      final accent = Color(_colorValue);
+                      return GestureDetector(
+                        onTap: () => setState(() => _icon = i),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: sel ? accent.withValues(alpha: 0.18) : scheme.surfaceContainerHigh,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(i, color: sel ? accent : scheme.onSurfaceVariant, size: 20),
                         ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(tr(context, 'রঙ', 'Color'), style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurface)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 10,
+                    children: _kColorChoices.map((c) {
+                      return GestureDetector(
+                        onTap: () => setState(() => _colorValue = c),
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(color: Color(c), shape: BoxShape.circle, border: Border.all(color: c == _colorValue ? scheme.onSurface : Colors.transparent, width: 2)),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(tr(context, 'পুনরাবৃত্তি', 'Recurrence'), style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurface)),
+                  const SizedBox(height: 8),
+                  SegmentedButton<String>(
+                    segments: [
+                      ButtonSegment(value: 'daily', label: Text(tr(context, 'প্রতিদিন', 'Daily'))),
+                      ButtonSegment(value: 'weekly', label: Text(tr(context, 'সাপ্তাহিক', 'Weekly'))),
                     ],
+                    selected: {_recurrence},
+                    onSelectionChanged: (s) => setState(() => _recurrence = s.first),
+                  ),
+                  if (_recurrence == 'weekly') ...[
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 6,
+                      children: [
+                        for (int dow = 1; dow <= 7; dow++)
+                          FilterChip(
+                            label: Text(['M', 'T', 'W', 'T', 'F', 'S', 'S'][dow - 1]),
+                            selected: _days.contains(dow),
+                            showCheckmark: false,
+                            onSelected: (v) => setState(() => v ? _days.add(dow) : _days.remove(dow)),
+                            selectedColor: Color(_colorValue).withValues(alpha: 0.2),
+                            labelStyle: TextStyle(color: _days.contains(dow) ? Color(_colorValue) : scheme.onSurface, fontWeight: FontWeight.w800),
+                          ),
+                      ],
+                    ),
+                  ],
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(backgroundColor: Color(_colorValue), minimumSize: const Size(0, 52)),
+                      onPressed: _save,
+                      child: Text(widget.existing == null ? tr(context, 'অভ্যাস যোগ করুন', 'Add habit') : tr(context, 'সংরক্ষণ', 'Save')),
+                    ),
                   ),
                 ],
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(backgroundColor: Color(_colorValue), minimumSize: const Size(0, 52)),
-                    onPressed: _save,
-                    child: Text(widget.existing == null ? tr(context, 'অভ্যাস যোগ করুন', 'Add habit') : tr(context, 'সংরক্ষণ', 'Save')),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         );

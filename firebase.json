@@ -1,0 +1,40 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "daily-utility-1d724",
+          "appId": "1:31522847211:android:2d6f4992cab45064a481ae",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "daily-utility-1d724",
+          "appId": "1:31522847211:ios:cebc8517757150aaa481ae"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "daily-utility-1d724",
+          "appId": "1:31522847211:ios:cebc8517757150aaa481ae"
+        }
+      },
+      "web": {
+        "default": {
+          "projectId": "daily-utility-1d724",
+          "appId": "1:31522847211:web:41485ac33e434f4ca481ae"
+        }
+      },
+      "windows": {
+        "default": {
+          "projectId": "daily-utility-1d724",
+          "appId": "1:31522847211:web:ab588c07385901dea481ae"
+        }
+      }
+    }
+  }
+}

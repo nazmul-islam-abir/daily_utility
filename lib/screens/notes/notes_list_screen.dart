@@ -23,15 +23,16 @@ class _NotesListScreenState extends State<NotesListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.bg,
+      backgroundColor: scheme.surfaceContainerLow,
       body: Container(
-        decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: AppColors.bgGradientLight)),
+        decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [scheme.surfaceContainerLow, scheme.surface])),
         child: SafeArea(
           bottom: false,
           child: Column(
             children: [
-              _buildHeader(),
+              _buildHeader(scheme: scheme),
               Expanded(
                 child: ValueListenableBuilder(
                   valueListenable: HiveService.notes.listenable(),
@@ -72,28 +73,31 @@ class _NotesListScreenState extends State<NotesListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.notes,
-        onPressed: () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: AppColors.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => const SimpleNoteSheet()),
+        onPressed: () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: scheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => const SimpleNoteSheet()),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader({required ColorScheme scheme}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(tr(context, 'একটি ভাবনা ধরুন', 'Capture a thought'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.text, letterSpacing: -0.5)),
+          Text(tr(context, 'একটি ভাবনা ধরুন', 'Capture a thought'), style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: scheme.onSurface, letterSpacing: -0.5)),
           const SizedBox(height: 4),
-          Text(tr(context, 'আপনার সব নোট এক জায়গায়।', 'All your notes in one place.'), style: const TextStyle(fontSize: 14, color: AppColors.textMuted)),
+          Text(tr(context, 'আপনার সব নোট এক জায়গায়।', 'All your notes in one place.'), style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant)),
           const SizedBox(height: 16),
           TextField(
+            style: TextStyle(color: scheme.onSurface, fontSize: 14, fontWeight: FontWeight.w600),
+            cursorColor: scheme.primary,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, color: scheme.onSurfaceVariant),
               hintText: tr(context, 'নোট খুঁজুন…', 'Search notes…'),
+              hintStyle: TextStyle(color: scheme.onSurfaceVariant),
               filled: true,
-              fillColor: AppColors.surface,
+              fillColor: scheme.surface,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.lg), borderSide: BorderSide.none),
             ),
             onChanged: (v) => setState(() => _query = v.trim()),
@@ -236,16 +240,17 @@ class _KeepNoteCard extends StatelessWidget {
   }
 
   void _showOptions(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: scheme.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(note.isPinned ? Icons.push_pin : Icons.push_pin_outlined, color: AppColors.primary),
+              leading: Icon(note.isPinned ? Icons.push_pin : Icons.push_pin_outlined, color: scheme.primary),
               title: Text(note.isPinned ? tr(context, 'পিন মুক্ত করুন', 'Unpin') : tr(context, 'পিন করুন', 'Pin')),
               onTap: () {
                 note.isPinned = !note.isPinned;
@@ -255,7 +260,7 @@ class _KeepNoteCard extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.edit_outlined, color: AppColors.primary),
+              leading: Icon(Icons.edit_outlined, color: scheme.primary),
               title: Text(tr(context, 'সম্পাদনা', 'Edit')),
               onTap: () {
                 Navigator.pop(ctx);
@@ -263,8 +268,8 @@ class _KeepNoteCard extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.delete_outline, color: AppColors.danger),
-              title: Text(tr(context, 'মুছুন', 'Delete'), style: const TextStyle(color: AppColors.danger)),
+              leading: Icon(Icons.delete_outline, color: scheme.error),
+              title: Text(tr(context, 'মুছুন', 'Delete'), style: TextStyle(color: scheme.error)),
               onTap: () async {
                 final ok = await confirmDelete(context, title: tr(context, 'নোটটি মুছবেন?', 'Delete this note?'));
                 if (ok) note.delete();

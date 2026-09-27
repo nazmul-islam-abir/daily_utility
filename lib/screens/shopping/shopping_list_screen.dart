@@ -41,6 +41,14 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: scheme.surfaceContainerLow,
+      appBar: AppBar(
+        backgroundColor: scheme.surfaceContainerLow,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(tr(context, 'শপিং তালিকা', 'Shopping List')),
+      ),
       body: Container(
         decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [scheme.surfaceContainerLow, scheme.surface])),
         child: SafeArea(
@@ -79,6 +87,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                             ),
                             onDismissed: (_) => item.delete(),
                             child: PressableCard(
+                              color: scheme.surface,
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               child: CheckboxListTile(
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: BorderSide.none),
@@ -116,13 +125,18 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
 
   Widget _buildHeader({required ColorScheme scheme}) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Expanded(child: Text(tr(context, 'শপিং তালিকা', 'Shopping List'), style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: scheme.onSurface, letterSpacing: -0.5))),
+              Expanded(
+                child: Text(
+                  tr(context, 'যা কিনতে হবে তা ট্র্যাক করুন।', 'Track what you need to buy.'),
+                  style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant),
+                ),
+              ),
               AnimatedBuilder(
                 animation: HiveService.shopping.listenable(),
                 builder: (context, _) {
@@ -137,9 +151,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          Text(tr(context, 'যা কিনতে হবে তা ট্র্যাক করুন।', 'Track what you need to buy.'), style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant)),
-          const SizedBox(height: 14),
+          const SizedBox(height: 6),
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(color: scheme.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
@@ -149,7 +161,13 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                   flex: 3,
                   child: TextField(
                     controller: _nameCtrl,
-                    decoration: InputDecoration(hintText: tr(context, 'যেমন: চাল', 'e.g. Rice'), border: InputBorder.none, contentPadding: const EdgeInsets.symmetric(horizontal: 12)),
+                    style: TextStyle(color: scheme.onSurface, fontSize: 14, fontWeight: FontWeight.w600),
+                    decoration: InputDecoration(
+                      hintText: tr(context, 'যেমন: চাল', 'e.g. Rice'),
+                      hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
                     onSubmitted: (_) => _add(),
                     textCapitalization: TextCapitalization.sentences,
                   ),
@@ -159,7 +177,13 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                   flex: 2,
                   child: TextField(
                     controller: _qtyCtrl,
-                    decoration: InputDecoration(hintText: tr(context, 'পরিমাণ', 'Qty'), border: InputBorder.none, contentPadding: const EdgeInsets.symmetric(horizontal: 12)),
+                    style: TextStyle(color: scheme.onSurface, fontSize: 14, fontWeight: FontWeight.w600),
+                    decoration: InputDecoration(
+                      hintText: tr(context, 'পরিমাণ', 'Qty'),
+                      hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
                     onSubmitted: (_) => _add(),
                   ),
                 ),

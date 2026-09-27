@@ -14,6 +14,7 @@ class MoodStatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
@@ -24,37 +25,60 @@ class MoodStatsScreen extends StatelessWidget {
             return ListView(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: [
+                      Icon(Icons.bar_chart_rounded, size: 16, color: scheme.onSurfaceVariant),
+                      const SizedBox(width: 6),
+                      Text(
+                        tr(context, '${entries.length} টি এন্ট্রি বিশ্লেষিত', '${entries.length} entries analysed'),
+                        style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                ),
                 Row(
                   children: [
-                    Expanded(child: _statTile(tr(context, 'ধারা', 'Streak'), '${streakDays(entries)}', tr(context, 'দিন', 'Days'), Icons.local_fire_department_outlined, AppColors.mood)),
+                    Expanded(child: _statTile(context, tr(context, 'ধারা', 'Streak'), '${streakDays(entries)}', tr(context, 'দিন', 'Days'), Icons.local_fire_department_outlined, AppColors.mood)),
                     const SizedBox(width: 10),
-                    Expanded(child: _statTile(tr(context, 'শীর্ষ মেজাজ', 'Top Mood'), topMoodLabel(context, entries), '', Icons.emoji_emotions_outlined, _topMoodColor(entries))),
+                    Expanded(child: _statTile(context, tr(context, 'শীর্ষ মেজাজ', 'Top Mood'), topMoodLabel(context, entries), '', Icons.emoji_emotions_outlined, _topMoodColor(entries))),
                   ],
                 ),
                 const SizedBox(height: 24),
                 _WeeklyTrendCard(entries: entries),
                 const SizedBox(height: 24),
-                Text(tr(context, 'মেজাজ বিতরণ', 'Mood Distribution'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                Text(tr(context, 'মেজাজ বিতরণ', 'Mood Distribution'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface)),
                 const SizedBox(height: 4),
-                Align(alignment: Alignment.centerRight, child: Text(_monthLabel(), style: const TextStyle(fontSize: 12, color: AppColors.textMuted, letterSpacing: 0.6, fontWeight: FontWeight.w800))),
+                Align(alignment: Alignment.centerRight, child: Text(_monthLabel(), style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant, letterSpacing: 0.6, fontWeight: FontWeight.w800))),
                 const SizedBox(height: 8),
                 _DistributionCard(entries: entries),
                 const SizedBox(height: 24),
-                Text(tr(context, 'অ্যাক্টিভিটি হিটম্যাপ', 'Activity Heatmap'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                Text(tr(context, 'অ্যাক্টিভিটি হিটম্যাপ', 'Activity Heatmap'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface)),
                 const SizedBox(height: 12),
                 _Heatmap(entries: entries),
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFE0EAFF), Color(0xFFF2F4F8)]), borderRadius: BorderRadius.circular(AppRadius.xl)),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: AppColors.cardGradient(AppColors.mood),
+                    ),
+                    borderRadius: BorderRadius.circular(AppRadius.xl),
+                  ),
                   child: Column(
                     children: [
-                      Text(tr(context, 'সচেতন মুহূর্ত', 'Mindful Moment'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: AppColors.text)),
+                      Text(
+                        tr(context, 'সচেতন মুহূর্ত', 'Mindful Moment'),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface),
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         tr(context, 'আপনি গত মাসের তুলনায় ২০% বেশি ইতিবাচক বোধ করছেন। প্রতিফলন চালিয়ে যান।', 'You feel 20% more positive than last month. Keep reflecting.'),
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 13.5, color: AppColors.textMuted, height: 1.5),
+                        style: TextStyle(fontSize: 13.5, color: scheme.onSurfaceVariant, height: 1.5),
                       ),
                     ],
                   ),
@@ -72,7 +96,8 @@ class MoodStatsScreen extends StatelessWidget {
     return m[DateTime.now().month - 1];
   }
 
-  Widget _statTile(String label, String value, String suffix, IconData icon, Color color) {
+  Widget _statTile(BuildContext context, String label, String value, String suffix, IconData icon, Color color) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: color.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(AppRadius.lg)),
@@ -82,7 +107,7 @@ class MoodStatsScreen extends StatelessWidget {
           Row(children: [Icon(icon, color: color, size: 16), const SizedBox(width: 6), Text(label, style: TextStyle(fontSize: 13, color: color, fontWeight: FontWeight.w800))]),
           const SizedBox(height: 8),
           Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: color)),
-          if (suffix.isNotEmpty) Text(suffix, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+          if (suffix.isNotEmpty) Text(suffix, style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant)),
         ],
       ),
     );
@@ -137,6 +162,7 @@ class _WeeklyTrendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final today = DateTime.now();
     final weekStart = today.subtract(Duration(days: today.weekday - 1));
     final counts = List.generate(7, (i) {
@@ -146,11 +172,11 @@ class _WeeklyTrendCard extends StatelessWidget {
     final maxC = counts.fold<int>(0, (a, b) => a > b ? a : b).clamp(1, 1000);
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(AppRadius.xl)),
+      decoration: BoxDecoration(color: scheme.surface, borderRadius: BorderRadius.circular(AppRadius.xl)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(tr(context, 'সাপ্তাহিক প্রবণতা', 'Weekly Trend'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+          Text(tr(context, 'সাপ্তাহিক প্রবণতা', 'Weekly Trend'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface)),
           const SizedBox(height: 16),
           SizedBox(
             height: 140,
@@ -169,10 +195,16 @@ class _WeeklyTrendCard extends StatelessWidget {
                         AnimatedContainer(
                           duration: AppAnimations.medium,
                           height: h,
-                          decoration: BoxDecoration(color: isToday ? AppColors.text : AppColors.primary.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(8)),
+                          decoration: BoxDecoration(
+                            color: isToday ? AppColors.mood : AppColors.mood.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                         const SizedBox(height: 6),
-                        Text(['M', 'T', 'W', 'T', 'F', 'S', 'S'][i], style: TextStyle(fontSize: 11.5, color: isToday ? AppColors.text : AppColors.textMuted, fontWeight: FontWeight.w800)),
+                        Text(
+                          ['M', 'T', 'W', 'T', 'F', 'S', 'S'][i],
+                          style: TextStyle(fontSize: 11.5, color: isToday ? scheme.onSurface : scheme.onSurfaceVariant, fontWeight: FontWeight.w800),
+                        ),
                       ],
                     ),
                   ),
@@ -192,12 +224,13 @@ class _DistributionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final total = entries.length;
     final counts = List.generate(5, (i) => entries.where((e) => e.moodLevel == i + 1).length);
     final reversedCounts = counts.reversed.toList();
     final reversedColors = moodColors.reversed.toList();
     return Container(
-      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
+      decoration: BoxDecoration(color: scheme.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: Column(
         children: List.generate(5, (i) {
           final pct = total == 0 ? 0 : (reversedCounts[i] / total * 100).round();
@@ -207,8 +240,8 @@ class _DistributionCard extends StatelessWidget {
               children: [
                 Container(width: 10, height: 10, decoration: BoxDecoration(color: reversedColors[i], shape: BoxShape.circle)),
                 const SizedBox(width: 10),
-                Expanded(child: Text(moodLabel(context, [5,4,3,2,1][i]), style: const TextStyle(fontWeight: FontWeight.w700))),
-                Text('$pct%', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.textMuted)),
+                Expanded(child: Text(moodLabel(context, [5, 4, 3, 2, 1][i]), style: TextStyle(fontWeight: FontWeight.w700, color: scheme.onSurface))),
+                Text('$pct%', style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurfaceVariant)),
               ],
             ),
           );
@@ -224,8 +257,9 @@ class _Heatmap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final today = DateTime.now();
-    final days = 28;
+    const days = 28;
     final start = today.subtract(Duration(days: days - 1));
     final tallyByDay = <String, int>{};
     for (final e in entries) {
@@ -234,11 +268,13 @@ class _Heatmap extends StatelessWidget {
     }
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
+      decoration: BoxDecoration(color: scheme.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: Column(
         children: [
           Row(
-            children: ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d) => Expanded(child: Center(child: Text(d, style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w700))))).toList(),
+            children: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+                .map((d) => Expanded(child: Center(child: Text(d, style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11, fontWeight: FontWeight.w700)))))
+                .toList(),
           ),
           const SizedBox(height: 8),
           GridView.builder(
@@ -252,13 +288,13 @@ class _Heatmap extends StatelessWidget {
               final c = tallyByDay[k] ?? 0;
               Color color;
               if (c == 0) {
-                color = AppColors.surfaceAlt;
+                color = scheme.surfaceContainerHigh;
               } else if (c == 1) {
-                color = AppColors.primary.withValues(alpha: 0.4);
+                color = AppColors.mood.withValues(alpha: 0.4);
               } else if (c == 2) {
-                color = AppColors.primary.withValues(alpha: 0.7);
+                color = AppColors.mood.withValues(alpha: 0.7);
               } else {
-                color = AppColors.text;
+                color = AppColors.mood;
               }
               return Container(decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)));
             },
@@ -267,11 +303,21 @@ class _Heatmap extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(tr(context, 'কম', 'Less'), style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+              Text(tr(context, 'কম', 'Less'), style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11)),
               const SizedBox(width: 6),
-              ...[0.0, 0.4, 0.7, 1.0].map((a) => Padding(padding: const EdgeInsets.symmetric(horizontal: 2), child: Container(width: 14, height: 14, decoration: BoxDecoration(color: a == 0 ? AppColors.surfaceAlt : AppColors.primary.withValues(alpha: a), borderRadius: BorderRadius.circular(3))))),
+              ...[0.0, 0.4, 0.7, 1.0].map((a) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: a == 0 ? scheme.surfaceContainerHigh : AppColors.mood.withValues(alpha: a),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                  )),
               const SizedBox(width: 6),
-              Text(tr(context, 'বেশি', 'More'), style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+              Text(tr(context, 'বেশি', 'More'), style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11)),
             ],
           ),
         ],

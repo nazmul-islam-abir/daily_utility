@@ -21,7 +21,7 @@ import '../screens/notes/notes_list_screen.dart';
 import '../screens/posts/posts_list_screen.dart';
 import '../screens/prayer/prayer_screen.dart';
 import '../screens/profile/profile_screen.dart';
-import '../screens/quiz/quiz_screen.dart';
+import '../screens/quiz/quiz_categories_screen.dart';
 import '../screens/reminders/reminders_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/shopping/shopping_list_screen.dart';
@@ -150,7 +150,7 @@ class AppDrawer extends StatelessWidget {
                         icon: Icons.psychology_outlined,
                         color: AppColors.quiz,
                         title: tr(context, 'দৈনিক কুইজ', 'Daily Quiz'),
-                        onTap: () => _push(context, const QuizScreen()),
+                        onTap: () => _push(context, const QuizCategoriesScreen()),
                       ),
                       _DrawerItem(
                         icon: Icons.lock_outline,

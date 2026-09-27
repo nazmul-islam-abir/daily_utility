@@ -76,6 +76,7 @@ class LoanDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return AnimatedBuilder(
       animation: HiveService.loans.listenable(),
       builder: (context, _) {
@@ -148,11 +149,13 @@ class LoanDetailScreen extends StatelessWidget {
                 ...payments.map((p) => Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: ListTile(
-                        tileColor: AppColors.surface,
+                        tileColor: scheme.surface,
+                        textColor: scheme.onSurface,
+                        iconColor: AppColors.success,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: BorderSide.none),
                         leading: const Icon(Icons.check_circle, color: AppColors.success),
-                        title: Text(_fmt.format(p.amount), style: const TextStyle(fontWeight: FontWeight.w700)),
-                        subtitle: Text(DateFormat('d MMMM y').format(p.date)),
+                        title: Text(_fmt.format(p.amount), style: TextStyle(fontWeight: FontWeight.w700, color: scheme.onSurface)),
+                        subtitle: Text(DateFormat('d MMMM y').format(p.date), style: TextStyle(color: scheme.onSurfaceVariant)),
                       ),
                     )),
             ],

@@ -1,0 +1,60 @@
+rules_version = '2';
+
+// ============================================================================
+// Daily Utility — Firestore Security Rules
+// ============================================================================
+// Three collections are read/written by the app at runtime. End users
+// (anonymous app installs) can READ the public content collections and
+// CREATE documents in the contact_messages collection; nothing else is
+// allowed for non-admin clients.
+//
+//   notice            public read        / admin write only
+//   quiz_categories   public read        / admin write only
+//   quiz_questions    public read        / admin write only
+//   contact_messages  admin read         / public create, admin update/delete
+//
+// Default-deny for everything else.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Public content (read by the app) ----------
+
+    // Notice board.
+    match /notice/{noticeId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Quiz categories (each document holds one category + its question
+    // array). Public read so the hub and quiz player can fetch them.
+    match /quiz_categories/{categoryId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Reserved split-schema (not currently used). Closed by default but
+    // kept here so future migrations don't surprise the live ruleset.
+    match /quiz_questions/{questionId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ---------- Contact form (written by the app) ----------
+
+    // The in-app "Contact us" form. End users can CREATE only — they
+    // can't read other people's messages, and can't update or delete.
+    // The admin reads from the Firebase console.
+    match /contact_messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+
+    // ---------- Default deny ----------
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

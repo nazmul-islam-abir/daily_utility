@@ -4,44 +4,131 @@ import 'package:intl/intl.dart';
 import '../../services/locale_service.dart';
 import '../../theme/app_theme.dart';
 
+/// Date Tools — hub screen that lists the four calculators as cards.
+/// Tapping a card pushes the dedicated calculator screen (each calculator
+/// keeps its own state — picked dates, results, etc.).
 class DateToolsScreen extends StatelessWidget {
   const DateToolsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final tabs = <_CalcTab>[
-      _CalcTab('বয়স', 'Age', const AgeCalculator()),
-      _CalcTab('ব্যবধান', 'Days Between', const DaysBetween()),
-      _CalcTab('কাউন্টডাউন', 'Countdown', const EventCountdown()),
-      _CalcTab('ক্যালেন্ডার', 'Calendar', const MonthCalendar()),
+    final tools = <_Tool>[
+      _Tool(
+        bn: 'বয়স',
+        en: 'Age',
+        subBn: 'জন্মতারিখ থেকে সঠিক বয়স',
+        subEn: 'Exact age from date of birth',
+        icon: Icons.cake_outlined,
+        color: AppColors.dateTools,
+        screen: const AgeCalculator(),
+      ),
+      _Tool(
+        bn: 'ব্যবধান',
+        en: 'Days Between',
+        subBn: 'দুই তারিখের মধ্যে কত দিন',
+        subEn: 'Number of days between two dates',
+        icon: Icons.date_range_outlined,
+        color: AppColors.primary,
+        screen: const DaysBetween(),
+      ),
+      _Tool(
+        bn: 'কাউন্টডাউন',
+        en: 'Countdown',
+        subBn: 'গুরুত্বপূর্ণ ইভেন্টের বাকি দিন',
+        subEn: 'Days remaining for an important event',
+        icon: Icons.event_outlined,
+        color: AppColors.warning,
+        screen: const EventCountdown(),
+      ),
+      _Tool(
+        bn: 'ক্যালেন্ডার',
+        en: 'Calendar',
+        subBn: 'পুরো মাস দেখুন ও তারিখ ব্রাউজ করুন',
+        subEn: 'Browse the full month and pick a date',
+        icon: Icons.calendar_month_outlined,
+        color: AppColors.success,
+        screen: const MonthCalendar(),
+      ),
     ];
-    return DefaultTabController(
-      length: tabs.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(tr(context, 'তারিখ টুলস', 'Date Tools')),
-          bottom: TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: [for (final t in tabs) Tab(text: tr(context, t.bn, t.en))],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            for (final t in tabs)
-              SingleChildScrollView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 32), child: t.child),
-          ],
-        ),
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+      appBar: AppBar(
+        title: Text(tr(context, 'তারিখ টুলস', 'Date Tools')),
+      ),
+      body: ListView.separated(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+        itemCount: tools.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        itemBuilder: (context, i) {
+          final t = tools[i];
+          return Card(
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              leading: CircleAvatar(
+                backgroundColor: t.color.withValues(alpha: 0.14),
+                child: Icon(t.icon, color: t.color),
+              ),
+              title: Text(
+                tr(context, t.bn, t.en),
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Text(tr(context, t.subBn, t.subEn)),
+              trailing: Icon(
+                Icons.chevron_right_rounded,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => _ToolScreen(tool: t),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-class _CalcTab {
+class _Tool {
   final String bn;
   final String en;
-  final Widget child;
-  _CalcTab(this.bn, this.en, this.child);
+  final String subBn;
+  final String subEn;
+  final IconData icon;
+  final Color color;
+  final Widget screen;
+  const _Tool({
+    required this.bn,
+    required this.en,
+    required this.subBn,
+    required this.subEn,
+    required this.icon,
+    required this.color,
+    required this.screen,
+  });
+}
+
+/// Generic wrapper that gives each calculator its own AppBar (with a
+/// back button) so navigating away doesn't pop back to the hub without
+/// context.
+class _ToolScreen extends StatelessWidget {
+  final _Tool tool;
+  const _ToolScreen({required this.tool});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr(context, tool.bn, tool.en)),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+        child: tool.screen,
+      ),
+    );
+  }
 }
 
 class AgeCalculator extends StatefulWidget {
@@ -66,6 +153,7 @@ class _AgeCalculatorState extends State<AgeCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     String result = '';
     if (_dob != null) {
       final now = DateTime.now();
@@ -94,9 +182,15 @@ class _AgeCalculatorState extends State<AgeCalculator> {
           const SizedBox(height: 10),
           Text(
             result,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.dateTools),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.dateTools),
           ),
         ],
+        const SizedBox(height: 6),
+        Text(
+          tr(context, 'আপনার জন্মতারিখ নির্বাচন করলে বয়স বছর, মাস ও দিনে দেখানো হবে।',
+              'Pick your date of birth to see your exact age in years, months, and days.'),
+          style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+        ),
       ],
     );
   }
@@ -132,6 +226,7 @@ class _DaysBetweenState extends State<DaysBetween> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final diff = (_from != null && _to != null) ? _to!.difference(_from!).inDays.abs() : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,6 +252,12 @@ class _DaysBetweenState extends State<DaysBetween> {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.dateTools),
           ),
         ],
+        const SizedBox(height: 6),
+        Text(
+          tr(context, 'দুটি তারিখ নির্বাচন করলে তাদের মধ্যবর্তী দিনের সংখ্যা দেখানো হবে।',
+              'Pick two dates to see the number of days between them.'),
+          style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+        ),
       ],
     );
   }
@@ -185,13 +286,18 @@ class _EventCountdownState extends State<EventCountdown> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final days = _date != null
         ? _date!.difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays
         : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(controller: _nameCtrl, decoration: InputDecoration(labelText: tr(context, 'ইভেন্টের নাম', 'Event name'))),
+        TextField(
+          controller: _nameCtrl,
+          style: TextStyle(color: scheme.onSurface),
+          decoration: InputDecoration(labelText: tr(context, 'ইভেন্টের নাম', 'Event name')),
+        ),
         const SizedBox(height: 10),
         OutlinedButton.icon(
           onPressed: _pick,
@@ -216,13 +322,41 @@ class MonthCalendar extends StatelessWidget {
   const MonthCalendar({super.key});
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 340,
-      child: CalendarDatePicker(
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
-        onDateChanged: (_) {},
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // Force the selected-day text to a colour that contrasts strongly with
+    // the (light) primary used for the selection circle in dark mode —
+    // without this override Flutter can render white-on-white.
+    final selectedFg = isDark ? Colors.black : Colors.white;
+    final pickerTheme = Theme.of(context).copyWith(
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: scheme.surface,
+        headerBackgroundColor: scheme.surface,
+        headerForegroundColor: scheme.onSurface,
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return scheme.primary;
+          return null;
+        }),
+        dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return selectedFg;
+          if (states.contains(WidgetState.disabled)) return scheme.onSurfaceVariant.withValues(alpha: 0.4);
+          return scheme.onSurface;
+        }),
+        todayBackgroundColor: WidgetStateProperty.all(Colors.transparent),
+        todayForegroundColor: WidgetStateProperty.all(AppColors.dateTools),
+        weekdayStyle: TextStyle(color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700),
+      ),
+    );
+    return Theme(
+      data: pickerTheme,
+      child: SizedBox(
+        height: 340,
+        child: CalendarDatePicker(
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+          onDateChanged: (_) {},
+        ),
       ),
     );
   }

@@ -66,14 +66,14 @@ class _VaultScreenState extends State<VaultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
         return Scaffold(
-          backgroundColor: AppColors.bg,
+          backgroundColor: scheme.surfaceContainerLow,
           appBar: AppBar(
-            backgroundColor: AppColors.bg,
-            title: Text(tr(context, 'ভল্ট', 'Vault'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+            title: Text(tr(context, 'ভল্ট', 'Vault')),
             actions: [
               IconButton(icon: const Icon(Icons.search), onPressed: () => showSearch(context: context, delegate: _VaultSearchDelegate())),
             ],
@@ -106,33 +106,56 @@ class _VaultScreenState extends State<VaultScreen> {
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                      child: HeroCard(
-                        gradient: const [Color(0xFFE0EAFF), Color(0xFFF2F4F8)],
-                        darkForeground: false,
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                      child: Container(
                         padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: AppColors.cardGradient(AppColors.vault),
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadius.xl),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Expanded(
-                                  child: Text(tr(context, 'নিরাপত্তা স্বাস্থ্য', 'Security Health'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: AppColors.text)),
+                                  child: Text(
+                                    tr(context, 'নিরাপত্তা স্বাস্থ্য', 'Security Health'),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: scheme.onSurface),
+                                  ),
                                 ),
                                 Icon(Icons.shield_outlined, color: AppColors.danger, size: 22),
                               ],
                             ),
                             const SizedBox(height: 4),
-                            Text(tr(context, 'মোট ${all.length}টি ক্রেডেনশিয়াল মনিটরিং', 'Monitoring ${all.length} active credentials'), style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+                            Text(
+                              tr(context, 'মোট ${all.length}টি ক্রেডেনশিয়াল মনিটরিং', 'Monitoring ${all.length} active credentials'),
+                              style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
+                            ),
                             const SizedBox(height: 14),
                             Row(
                               children: [
                                 Expanded(
-                                  child: StatCard(label: tr(context, 'দুর্বল', 'Weak'), value: '$weak', color: AppColors.text, icon: Icons.warning_amber_outlined),
+                                  child: StatCard(
+                                    label: tr(context, 'দুর্বল', 'Weak'),
+                                    value: '$weak',
+                                    color: scheme.onSurface,
+                                    icon: Icons.warning_amber_outlined,
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
-                                  child: StatCard(label: tr(context, 'আপস', 'Compromised'), value: '$compromised', color: AppColors.danger, icon: Icons.report_gmailerrorred_outlined, emphasised: true),
+                                  child: StatCard(
+                                    label: tr(context, 'আপস', 'Compromised'),
+                                    value: '$compromised',
+                                    color: AppColors.danger,
+                                    icon: Icons.report_gmailerrorred_outlined,
+                                    emphasised: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -145,14 +168,23 @@ class _VaultScreenState extends State<VaultScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                       child: TextField(
-                        decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: tr(context, 'ক্রেডেনশিয়াল খুঁজুন…', 'Search credentials…')),
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: tr(context, 'ক্রেডেনশিয়াল খুঁজুন…', 'Search credentials…'),
+                        ),
                         onChanged: (v) => setState(() => _query = v.trim()),
                       ),
                     ),
                   ),
                   SliverToBoxAdapter(
                     child: FilterChipsRow(
-                      items: [tr(context, 'সব', 'All'), tr(context, 'ব্যাংকিং', 'Banking'), tr(context, 'সোশ্যাল', 'Social'), tr(context, 'কাজ', 'Work'), tr(context, 'অন্যান্য', 'Other')],
+                      items: [
+                        tr(context, 'সব', 'All'),
+                        tr(context, 'ব্যাংকিং', 'Banking'),
+                        tr(context, 'সোশ্যাল', 'Social'),
+                        tr(context, 'কাজ', 'Work'),
+                        tr(context, 'অন্যান্য', 'Other'),
+                      ],
                       selected: _filter == 'all' ? null : _filter,
                       colorFor: _colorForFilter,
                       onSelect: (v) => setState(() => _filter = v ?? 'all'),
@@ -176,7 +208,12 @@ class _VaultScreenState extends State<VaultScreen> {
                           child: Row(
                             children: [
                               MiniSectionLabel(_categoryLabel(entry.key)),
-                              const Expanded(child: Divider(indent: 12)),
+                              Expanded(
+                                child: Divider(
+                                  indent: 12,
+                                  color: scheme.outlineVariant.withValues(alpha: 0.4),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -233,8 +270,10 @@ class _CredentialCardState extends State<_CredentialCard> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final c = widget.cred;
     return PressableCard(
+      color: scheme.surface,
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => VaultEditorScreen(existing: c))),
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -248,19 +287,35 @@ class _CredentialCardState extends State<_CredentialCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(c.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900)),
+                    Text(c.title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: scheme.onSurface)),
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        Expanded(child: Text(c.username, style: const TextStyle(fontSize: 12.5, color: AppColors.textMuted), maxLines: 1, overflow: TextOverflow.ellipsis)),
+                        Expanded(
+                          child: Text(
+                            c.username,
+                            style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                         const SizedBox(width: 6),
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () {
                             Clipboard.setData(ClipboardData(text: c.username));
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr(context, 'ইউজারনেম কপি হয়েছে', 'Username copied')), behavior: SnackBarBehavior.floating, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md))));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(tr(context, 'ইউজারনেম কপি হয়েছে', 'Username copied')),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
+                              ),
+                            );
                           },
-                          child: const Padding(padding: EdgeInsets.all(4), child: Icon(Icons.copy_outlined, size: 16, color: AppColors.textMuted)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(Icons.copy_outlined, size: 16, color: scheme.onSurfaceVariant),
+                          ),
                         ),
                       ],
                     ),
@@ -272,24 +327,30 @@ class _CredentialCardState extends State<_CredentialCard> {
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(AppRadius.md)),
+            decoration: BoxDecoration(color: scheme.surfaceContainerHigh, borderRadius: BorderRadius.circular(AppRadius.md)),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     _reveal ? c.password : '•' * (c.password.length.clamp(6, 16)),
-                    style: const TextStyle(fontFamily: 'monospace', fontSize: 14, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontFamily: 'monospace', fontSize: 14, fontWeight: FontWeight.w700, color: scheme.onSurface),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(_reveal ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                  icon: Icon(_reveal ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: scheme.onSurfaceVariant),
                   onPressed: () => setState(() => _reveal = !_reveal),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.copy_outlined),
+                  icon: Icon(Icons.copy_outlined, color: scheme.onSurfaceVariant),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: c.password));
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr(context, 'পাসওয়ার্ড কপি হয়েছে', 'Password copied')), behavior: SnackBarBehavior.floating, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md))));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(tr(context, 'পাসওয়ার্ড কপি হয়েছে', 'Password copied')),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
+                      ),
+                    );
                   },
                 ),
               ],
@@ -300,9 +361,18 @@ class _CredentialCardState extends State<_CredentialCard> {
               padding: const EdgeInsets.only(top: 8),
               child: Row(
                 children: [
-                  Icon(c.isCompromised ? Icons.report_gmailerrorred : Icons.warning_amber_outlined, size: 14, color: AppColors.danger),
+                  Icon(
+                    c.isCompromised ? Icons.report_gmailerrorred : Icons.warning_amber_outlined,
+                    size: 14,
+                    color: AppColors.danger,
+                  ),
                   const SizedBox(width: 4),
-                  Text(c.isCompromised ? tr(context, 'আপসকৃত — পরিবর্তন করুন', 'Compromised — change it') : tr(context, 'দুর্বল পাসওয়ার্ড', 'Weak password'), style: const TextStyle(fontSize: 11.5, color: AppColors.danger, fontWeight: FontWeight.w800)),
+                  Text(
+                    c.isCompromised
+                        ? tr(context, 'আপসকৃত — পরিবর্তন করুন', 'Compromised — change it')
+                        : tr(context, 'দুর্বল পাসওয়ার্ড', 'Weak password'),
+                    style: const TextStyle(fontSize: 11.5, color: AppColors.danger, fontWeight: FontWeight.w800),
+                  ),
                 ],
               ),
             ),
@@ -329,20 +399,26 @@ class _VaultSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) => _buildList(context);
 
   Widget _buildList(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final all = HiveService.vault.values.toList();
     final q = query.toLowerCase();
     final filtered = all.where((v) => v.title.toLowerCase().contains(q) || v.username.toLowerCase().contains(q)).toList();
     if (filtered.isEmpty) {
-      return EmptyState(icon: Icons.search_off, title: tr(context, 'কিছু পাওয়া যায়নি', 'No matches'), message: tr(context, 'অন্য কিওয়ার্ড দিয়ে চেষ্টা করুন', 'Try a different keyword'));
+      return EmptyState(
+        icon: Icons.search_off,
+        title: tr(context, 'কিছু পাওয়া যায়নি', 'No matches'),
+        message: tr(context, 'অন্য কিওয়ার্ড দিয়ে চেষ্টা করুন', 'Try a different keyword'),
+      );
     }
     return ListView.builder(
       itemCount: filtered.length,
       itemBuilder: (context, i) {
         final c = filtered[i];
         return ListTile(
+          tileColor: scheme.surface,
           leading: const Icon(Icons.lock_outline),
-          title: Text(c.title),
-          subtitle: Text(c.username),
+          title: Text(c.title, style: TextStyle(color: scheme.onSurface)),
+          subtitle: Text(c.username, style: TextStyle(color: scheme.onSurfaceVariant)),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => VaultEditorScreen(existing: c))),
         );
       },

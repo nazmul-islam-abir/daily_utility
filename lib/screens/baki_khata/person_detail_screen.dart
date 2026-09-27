@@ -28,7 +28,12 @@ class PersonDetailScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(direction == 'gave' ? tr(ctx, '${person.name}-কে দিলেন', 'You gave ${person.name}') : tr(ctx, '${person.name} থেকে পেলেন', 'You got from ${person.name}'), style: Theme.of(ctx).textTheme.titleLarge),
+            Text(
+              direction == 'gave'
+                  ? tr(ctx, '${person.name}-কে দিলেন', 'You gave ${person.name}')
+                  : tr(ctx, '${person.name} থেকে পেলেন', 'You got from ${person.name}'),
+              style: Theme.of(ctx).textTheme.titleLarge,
+            ),
             const SizedBox(height: 14),
             TextField(
               controller: amountCtrl,
@@ -45,7 +50,14 @@ class PersonDetailScreen extends StatelessWidget {
               onPressed: () async {
                 final amount = double.tryParse(amountCtrl.text.trim());
                 if (amount == null || amount <= 0) return;
-                final entry = LedgerEntry(id: _uuid.v4(), personId: person.id, amount: amount, direction: direction, note: noteCtrl.text.trim().isEmpty ? null : noteCtrl.text.trim(), date: DateTime.now());
+                final entry = LedgerEntry(
+                  id: _uuid.v4(),
+                  personId: person.id,
+                  amount: amount,
+                  direction: direction,
+                  note: noteCtrl.text.trim().isEmpty ? null : noteCtrl.text.trim(),
+                  date: DateTime.now(),
+                );
                 await HiveService.ledger.put(entry.id, entry);
                 if (ctx.mounted) Navigator.pop(ctx, true);
               },
@@ -56,18 +68,29 @@ class PersonDetailScreen extends StatelessWidget {
       ),
     );
     if (result == true && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(direction == 'gave' ? tr(context, 'লেনদেন যোগ হয়েছে (দিলেন)', 'Entry added (you gave)') : tr(context, 'লেনদেন যোগ হয়েছে (পেলেন)', 'Entry added (you got)'))));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            direction == 'gave'
+                ? tr(context, 'লেনদেন যোগ হয়েছে (দিলেন)', 'Entry added (you gave)')
+                : tr(context, 'লেনদেন যোগ হয়েছে (পেলেন)', 'Entry added (you got)'),
+          ),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: scheme.surfaceContainerLow,
       appBar: AppBar(title: Text(person.name)),
       body: ValueListenableBuilder(
         valueListenable: HiveService.ledger.listenable(),
         builder: (context, Box<LedgerEntry> box, _) {
-          final entries = box.values.where((e) => e.personId == person.id).toList()..sort((a, b) => b.date.compareTo(a.date));
+          final entries = box.values.where((e) => e.personId == person.id).toList()
+            ..sort((a, b) => b.date.compareTo(a.date));
           final balance = entries.fold(0.0, (s, e) => s + e.signedAmount);
           final theyOweYou = balance >= 0;
 
@@ -84,12 +107,37 @@ class PersonDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      theyOweYou ? tr(context, 'আপনি পাবেন', 'You will receive') : tr(context, 'আপনি দেবেন', 'You will pay'),
-                      style: TextStyle(color: theyOweYou ? AppColors.success : AppColors.danger, fontWeight: FontWeight.w700),
+                    Row(
+                      children: [
+                        Text(
+                          theyOweYou
+                              ? tr(context, 'আপনি পাবেন', 'You will receive')
+                              : tr(context, 'আপনি দেবেন', 'You will pay'),
+                          style: TextStyle(color: theyOweYou ? AppColors.success : AppColors.danger, fontWeight: FontWeight.w700),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: (theyOweYou ? AppColors.success : AppColors.danger).withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            '${entries.length} ${tr(context, 'টি', '')}'.trim(),
+                            style: TextStyle(
+                              color: theyOweYou ? AppColors.success : AppColors.danger,
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
-                    Text(_fmt.format(balance.abs()), style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, color: theyOweYou ? AppColors.success : AppColors.danger)),
+                    Text(
+                      _fmt.format(balance.abs()),
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, color: theyOweYou ? AppColors.success : AppColors.danger),
+                    ),
                   ],
                 ),
               ),
@@ -115,10 +163,20 @@ class PersonDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SectionHeader(tr(context, 'লেনদেনের ইতিহাস', 'Transaction history')),
+              SectionHeader(
+                tr(context, 'লেনদেনের ইতিহাস', 'Transaction history'),
+                trailing: Text(
+                  tr(context, '${entries.length} টি এন্ট্রি', '${entries.length} entries'),
+                  style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700),
+                ),
+              ),
               Expanded(
                 child: entries.isEmpty
-                    ? EmptyState(icon: Icons.receipt_long_outlined, title: tr(context, 'কোনো লেনদেন নেই', 'No transactions yet'), message: tr(context, 'উপরের বাটন থেকে যোগ করুন।', 'Add one using the buttons above.'))
+                    ? EmptyState(
+                        icon: Icons.receipt_long_outlined,
+                        title: tr(context, 'কোনো লেনদেন নেই', 'No transactions yet'),
+                        message: tr(context, 'উপরের বাটন থেকে যোগ করুন।', 'Add one using the buttons above.'),
+                      )
                     : ListView.separated(
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
                         itemCount: entries.length,
@@ -138,11 +196,21 @@ class PersonDetailScreen extends StatelessWidget {
                             confirmDismiss: (_) => confirmDelete(context, title: tr(context, 'এন্ট্রিটি মুছবেন?', 'Delete this entry?')),
                             onDismissed: (_) => e.delete(),
                             child: ListTile(
-                              tileColor: AppColors.surface,
+                              tileColor: scheme.surface,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md), side: BorderSide.none),
                               leading: Icon(gave ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded, color: gave ? AppColors.danger : AppColors.success),
-                              title: Text(tr(context, '${gave ? '+ দিলেন' : '- পেলেন'} ${_fmt.format(e.amount)}', '${gave ? '+ You gave' : '- You got'} ${_fmt.format(e.amount)}'), style: const TextStyle(fontWeight: FontWeight.w700)),
-                              subtitle: Text('${DateFormat('d MMM y').format(e.date)}${e.note != null ? ' · ${e.note}' : ''}'),
+                              title: Text(
+                                tr(
+                                  context,
+                                  '${gave ? '+ দিলেন' : '- পেলেন'} ${_fmt.format(e.amount)}',
+                                  '${gave ? '+ You gave' : '- You got'} ${_fmt.format(e.amount)}',
+                                ),
+                                style: const TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              subtitle: Text(
+                                '${DateFormat('d MMM y').format(e.date)}${e.note != null ? ' · ${e.note}' : ''}',
+                                style: TextStyle(color: scheme.onSurfaceVariant),
+                              ),
                             ),
                           );
                         },

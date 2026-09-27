@@ -84,5 +84,25 @@
 	<!-- Photo library add: writing shared post images back -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Daily Utility saves shared post images back to your photo library when you choose to.</string>
+
+	<!-- Web Clips in-app browser: allow arbitrary HTTPS/HTTP pages. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
+	<!-- Web Clips share-into-app: receive_sharing_intent uses this URL scheme on iOS. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.dailyutulity.share</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>dailyutility</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

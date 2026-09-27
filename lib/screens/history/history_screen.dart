@@ -7,9 +7,7 @@ import '../../services/locale_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
 
-/// Unified history: every calculation result and finance record. Each entry
-/// is stored in the local `history` box so it survives app restarts and
-/// (when backup is enabled) syncs to Google Drive alongside everything else.
+/// Unified history: every calculation result and finance record.
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
 
@@ -177,25 +175,52 @@ class _HistoryCard extends StatelessWidget {
             decoration: BoxDecoration(color: _color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
             child: Icon(_icon, color: _color),
           ),
-          title: Text(entry.title, style: const TextStyle(fontWeight: FontWeight.w800)),
+          title: Text(
+            entry.title,
+            style: const TextStyle(fontWeight: FontWeight.w800),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (entry.subtitle.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
-                  child: Text(entry.subtitle, style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  child: Text(
+                    entry.subtitle,
+                    style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(color: _color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(8)),
-                    child: Text(entry.result, style: TextStyle(color: _color, fontSize: 12, fontWeight: FontWeight.w900)),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: _color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        entry.result,
+                        style: TextStyle(
+                          color: _color,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w900,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ),
-                  const Spacer(),
-                  Text(DateFormat('d MMM, hh:mm a').format(entry.createdAt), style: TextStyle(fontSize: 11, color: scheme.onSurfaceVariant)),
+                  const SizedBox(width: 8),
+                  Text(
+                    DateFormat('d MMM, hh:mm a').format(entry.createdAt),
+                    style: TextStyle(fontSize: 11, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
             ],
@@ -220,7 +245,7 @@ class _HistoryCard extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(color: _color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(AppRadius.md)),
-                      child: Text(entry.result, style: TextStyle(color: _color, fontSize: 20, fontWeight: FontWeight.w900)),
+                      child: Text(entry.result, style: TextStyle(color: _color, fontSize: 18, fontWeight: FontWeight.w900)),
                     ),
                     const SizedBox(height: 16),
                     Text(tr(context, 'ইনপুট', 'Inputs'), style: const TextStyle(fontWeight: FontWeight.w800)),

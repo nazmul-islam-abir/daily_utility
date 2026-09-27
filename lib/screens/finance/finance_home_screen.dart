@@ -14,136 +14,192 @@ class FinanceHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final fmt = NumberFormat.currency(locale: 'en_BD', symbol: '৳', decimalDigits: 0);
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      body: Container(
-        decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: AppColors.bgGradientLight)),
-        child: ValueListenableBuilder(
-          valueListenable: HiveService.transactions.listenable(),
-          builder: (context, Box<MoneyTransaction> box, _) {
-            final txs = box.values.toList()..sort((a, b) => b.date.compareTo(a.date));
-            final income = txs.where((t) => t.type == 'income').fold(0.0, (s, t) => s + t.amount);
-            final expense = txs.where((t) => t.type == 'expense').fold(0.0, (s, t) => s + t.amount);
-            final balance = income - expense;
+      backgroundColor: scheme.surfaceContainerLow,
+      appBar: AppBar(
+        backgroundColor: scheme.surfaceContainerLow,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(tr(context, 'আয়-ব্যয়', 'Finance')),
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: HiveService.transactions.listenable(),
+        builder: (context, Box<MoneyTransaction> box, _) {
+          final txs = box.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+          final income = txs.where((t) => t.type == 'income').fold(0.0, (s, t) => s + t.amount);
+          final expense = txs.where((t) => t.type == 'expense').fold(0.0, (s, t) => s + t.amount);
+          final balance = income - expense;
 
-            final byCategory = <String, double>{};
-            for (final t in txs.where((t) => t.type == 'expense')) {
-              byCategory[t.category] = (byCategory[t.category] ?? 0) + t.amount;
-            }
-            final sortedCats = byCategory.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+          final byCategory = <String, double>{};
+          for (final t in txs.where((t) => t.type == 'expense')) {
+            byCategory[t.category] = (byCategory[t.category] ?? 0) + t.amount;
+          }
+          final sortedCats = byCategory.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppColors.finance, Color(0xFF1E40AF)]),
-                    borderRadius: BorderRadius.circular(AppRadius.xl),
-                    boxShadow: [BoxShadow(color: AppColors.finance.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 8))],
+          // Per-screen counter info — show "X transactions" so the user
+          // can see at a glance how much data lives here.
+          final txCount = txs.length;
+          final txCountBn = '$txCount টি লেনদেন';
+          final txCountEn = '$txCount transactions';
+
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
+            children: [
+              // Hero balance card — uses its own gradient so it stays vivid
+              // on both light and dark themes.
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.finance, Color(0xFF1E40AF)],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(tr(context, 'মোট ব্যালেন্স', 'Total Balance'), style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: 0.5)),
-                      const SizedBox(height: 6),
-                      AnimatedCounter(value: balance, prefix: '৳', style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 18),
-                      Row(
-                        children: [
-                          Expanded(child: _miniStat(tr(context, 'আয়', 'Income'), income, Icons.arrow_downward_rounded, true)),
-                          const SizedBox(width: 10),
-                          Expanded(child: _miniStat(tr(context, 'খরচ', 'Expense'), expense, Icons.arrow_upward_rounded, false)),
-                        ],
-                      ),
-                    ],
-                  ),
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                  boxShadow: [BoxShadow(color: AppColors.finance.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 8))],
                 ),
-                if (sortedCats.isNotEmpty) ...[
-                  SectionHeader(tr(context, 'ক্যাটাগরি অনুযায়ী খরচ', 'Spending by category')),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: Column(
-                        children: sortedCats.map((e) {
-                          final pct = expense == 0 ? 0.0 : e.value / expense;
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(child: Text(e.key, style: const TextStyle(fontWeight: FontWeight.w600))),
-                                    Text(fmt.format(e.value), style: const TextStyle(fontWeight: FontWeight.w700)),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(999),
-                                  child: LinearProgressIndicator(value: pct, minHeight: 6, backgroundColor: AppColors.surfaceAlt, color: AppColors.finance),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ],
-                SectionHeader(tr(context, 'সাম্প্রতিক লেনদেন', 'Recent transactions')),
-                if (txs.isEmpty)
-                  EmptyState(icon: Icons.receipt_long_outlined, title: tr(context, 'কোনো লেনদেন নেই', 'No transactions yet'), message: tr(context, '+ বাটনে চেপে প্রথম লেনদেন যোগ করুন।', 'Tap + to add your first transaction.'))
-                else
-                  ...txs.map((t) => Dismissible(
-                        key: ValueKey(t.id),
-                        direction: DismissDirection.endToStart,
-                        background: Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(color: AppColors.danger, borderRadius: BorderRadius.circular(AppRadius.lg)),
-                          child: const Icon(Icons.delete_outline, color: Colors.white),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          tr(context, 'মোট ব্যালেন্স', 'Total Balance'),
+                          style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: 0.5),
                         ),
-                        confirmDismiss: (_) => confirmDelete(context, title: tr(context, 'লেনদেনটি মুছবেন?', 'Delete this transaction?')),
-                        onDismissed: (_) => t.delete(),
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: PressableCard(
-                            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddTransactionScreen(existing: t))),
-                            padding: const EdgeInsets.all(12),
-                            child: Row(
-                              children: [
-                                GradientIconTile(
-                                  icon: t.type == 'income' ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
-                                  color: t.type == 'income' ? AppColors.success : AppColors.danger,
-                                  size: 42,
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(t.category, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                                      const SizedBox(height: 2),
-                                      Text('${DateFormat('d MMM').format(t.date)}${t.note != null && t.note!.isNotEmpty ? ' · ${t.note}' : ''}', style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '${t.type == 'income' ? '+' : '-'}${fmt.format(t.amount)}',
-                                  style: TextStyle(fontWeight: FontWeight.w800, color: t.type == 'income' ? AppColors.success : AppColors.danger),
-                                ),
-                              ],
-                            ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.22),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            tr(context, txCountBn, txCountEn),
+                            style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800),
                           ),
                         ),
-                      )),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    AnimatedCounter(
+                      value: balance,
+                      prefix: '৳',
+                      style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Expanded(child: _miniStat(tr(context, 'আয়', 'Income'), income, Icons.arrow_downward_rounded, true)),
+                        const SizedBox(width: 10),
+                        Expanded(child: _miniStat(tr(context, 'খরচ', 'Expense'), expense, Icons.arrow_upward_rounded, false)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              if (sortedCats.isNotEmpty) ...[
+                SectionHeader(tr(context, 'ক্যাটাগরি অনুযায়ী খরচ', 'Spending by category')),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Column(
+                      children: sortedCats.map((e) {
+                        final pct = expense == 0 ? 0.0 : e.value / expense;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(child: Text(e.key, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600))),
+                                  Text(fmt.format(e.value), style: const TextStyle(fontWeight: FontWeight.w700)),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(999),
+                                child: LinearProgressIndicator(
+                                  value: pct,
+                                  minHeight: 6,
+                                  backgroundColor: scheme.surfaceContainerHigh,
+                                  color: AppColors.finance,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
               ],
-            );
-          },
-        ),
+              SectionHeader(tr(context, 'সাম্প্রতিক লেনদেন', 'Recent transactions')),
+              if (txs.isEmpty)
+                EmptyState(
+                  icon: Icons.receipt_long_outlined,
+                  title: tr(context, 'কোনো লেনদেন নেই', 'No transactions yet'),
+                  message: tr(context, '+ বাটনে চেপে প্রথম লেনদেন যোগ করুন।', 'Tap + to add your first transaction.'),
+                )
+              else
+                ...txs.map((t) => Dismissible(
+                      key: ValueKey(t.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(color: AppColors.danger, borderRadius: BorderRadius.circular(AppRadius.lg)),
+                        child: const Icon(Icons.delete_outline, color: Colors.white),
+                      ),
+                      confirmDismiss: (_) => confirmDelete(context, title: tr(context, 'লেনদেনটি মুছবেন?', 'Delete this transaction?')),
+                      onDismissed: (_) => t.delete(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: PressableCard(
+                          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddTransactionScreen(existing: t))),
+                          padding: const EdgeInsets.all(12),
+                          color: scheme.surface,
+                          child: Row(
+                            children: [
+                              GradientIconTile(
+                                icon: t.type == 'income' ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
+                                color: t.type == 'income' ? AppColors.success : AppColors.danger,
+                                size: 42,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(t.category, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      '${DateFormat('d MMM').format(t.date)}${t.note != null && t.note!.isNotEmpty ? ' · ${t.note}' : ''}',
+                                      style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                '${t.type == 'income' ? '+' : '-'}${fmt.format(t.amount)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: t.type == 'income' ? AppColors.success : AppColors.danger,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.finance,
@@ -160,7 +216,8 @@ class FinanceHomeScreen extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 32, height: 32,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.25), shape: BoxShape.circle),
             alignment: Alignment.center,
             child: Icon(icon, color: Colors.white, size: 16),
@@ -173,7 +230,11 @@ class FinanceHomeScreen extends StatelessWidget {
               children: [
                 Text(label, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 11.5, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 1),
-                AnimatedCounter(value: value, prefix: '৳', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14)),
+                AnimatedCounter(
+                  value: value,
+                  prefix: '৳',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
+                ),
               ],
             ),
           ),

@@ -47,6 +47,16 @@ dependencies:
   # Pick images (camera + gallery) for profile avatar and post photos.
   image_picker: ^1.1.2
 
+  # Firebase + Firestore for fetching admin notices / broadcasts.
+  # Notice fields: title (string), para (string), imgurl (string?),
+  # linkurl (string?). Optional: createdAt (Timestamp), isPinned (bool).
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.4
+  # Read .env keys at build time (kept for future config use).
+  flutter_dotenv: ^5.2.1
+  # Open external links from inside the app (notice "Read more" button).
+  url_launcher: ^6.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -58,6 +68,7 @@ flutter:
 
   assets:
     - assets/audio/
+    - .env
 
 flutter_launcher_icons:
   image_path: "assets/appicon.png"

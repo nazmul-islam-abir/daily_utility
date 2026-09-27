@@ -22,7 +22,7 @@ import '../loan/loan_screen.dart';
 import '../mood/mood_screen.dart';
 import '../posts/posts_list_screen.dart';
 import '../prayer/prayer_screen.dart';
-import '../quiz/quiz_screen.dart';
+import '../quiz/quiz_categories_screen.dart';
 import '../reminders/reminders_screen.dart';
 import '../settings/settings_screen.dart';
 import '../shopping/shopping_list_screen.dart';
@@ -81,7 +81,7 @@ class MoreScreen extends StatelessWidget {
           _Item(Icons.emoji_emotions_outlined, AppColors.mood, tr(context, 'মেজাজ', 'Mood'), tr(context, 'প্রতিফলন ও পরিসংখ্যান', 'Reflect & track patterns'), const MoodScreen()),
           _Item(Icons.lock_outline, AppColors.vault, tr(context, 'ভল্ট', 'Vault'), tr(context, 'পাসওয়ার্ড সংরক্ষণ', 'Local credential keeper'), const VaultScreen()),
           _Item(Icons.dynamic_feed_rounded, AppColors.post, tr(context, 'পোস্ট', 'Posts'), tr(context, '${posts.length}টি পোস্ট', '${posts.length} posts'), const PostsListScreen()),
-          _Item(Icons.psychology_outlined, AppColors.quiz, tr(context, 'দৈনিক কুইজ', 'Daily Quiz'), tr(context, 'জ্ঞান যাচাই', 'Test your knowledge'), const QuizScreen()),
+          _Item(Icons.psychology_outlined, AppColors.quiz, tr(context, 'দৈনিক কুইজ', 'Daily Quiz'), tr(context, 'জ্ঞান যাচাই', 'Test your knowledge'), const QuizCategoriesScreen()),
           _Item(Icons.event_outlined, AppColors.dateTools, tr(context, 'তারিখ টুলস', 'Date Tools'), tr(context, 'বয়স, দিন গণনা', 'Age, day counters'), const DateToolsScreen()),
           _Item(Icons.alarm_outlined, AppColors.reminders, tr(context, 'রিমাইন্ডার', 'Reminders'), tr(context, 'সব রিমাইন্ডার', 'All reminders'), const RemindersScreen()),
           _Item(Icons.mosque_outlined, AppColors.prayer, tr(context, 'নামাজ ও কিবলা', 'Prayer & Qibla'), tr(context, 'নামাজের সময় ও কিবলা কম্পাস', 'Prayer times & Qibla compass'), const PrayerScreen()),

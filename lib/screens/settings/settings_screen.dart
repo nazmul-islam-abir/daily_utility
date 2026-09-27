@@ -8,6 +8,7 @@ import '../../services/settings_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
 import '../backup/backup_screen.dart';
+import '../contact/contact_screen.dart';
 import '../profile/profile_screen.dart';
 
 /// App-wide settings: language, theme, backup launcher, data tools, about.
@@ -203,6 +204,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         subtitle: Text(
                           tr(context, 'Google অ্যাকাউন্ট ছাড়াই .json ফাইলে এক্সপোর্ট/ইমপোর্ট', 'Export / import as a .json file — no Google account needed'),
                           style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: const Icon(Icons.support_agent_rounded, color: AppColors.primary),
+                        title: Text(tr(context, 'যোগাযোগ', 'Contact us'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                        subtitle: Text(
+                          tr(context, 'বাগ রিপোর্ট, পরামর্শ বা প্রশ্ন পাঠান', 'Send bug reports, suggestions or questions'),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const ContactScreen()),
                         ),
                       ),
                       if (name.isNotEmpty) ...[

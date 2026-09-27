@@ -55,7 +55,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     _titleCtrl = TextEditingController(text: p?.title ?? '');
     _bodyCtrl = TextEditingController(text: p?.body ?? '');
     _tagCtrl = TextEditingController();
-    _locationCtrl = TextEditingController(text: 'Studio Hub');
+    _locationCtrl = TextEditingController(text: LocaleService.isBangla ? 'স্টুডিও হাব' : 'Studio Hub');
     _category = p?.category ?? PostCategory.general;
     _colorValue = p?.colorValue ?? _palette.first;
     _imagePaths = List<String>.from(p?.imagePaths ?? const <String>[]);
@@ -244,11 +244,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(color: AppColors.success.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(999)),
-              child: const Row(
+              child: Row(
                 children: [
-                  CircleAvatar(radius: 3, backgroundColor: AppColors.success),
-                  SizedBox(width: 4),
-                  Text('• Live', style: TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.w900)),
+                  const CircleAvatar(radius: 3, backgroundColor: AppColors.success),
+                  const SizedBox(width: 4),
+                  Text(tr(context, '• লাইভ', '• Live'), style: const TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.w900)),
                 ],
               ),
             ),
@@ -410,7 +410,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(color: scheme.surfaceContainerHigh, borderRadius: BorderRadius.circular(8)),
-                  child: const Text('1:1 Square', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+                  child: Text(tr(context, '১:১ বর্গাকার', '1:1 Square'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
                 ),
               ],
             ),
@@ -436,7 +436,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.6), borderRadius: BorderRadius.circular(99)),
-                        child: Text('${_activeImageIndex + 1} of ${_imagePaths.length}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900)),
+                        child: Text(tr(context, '${_activeImageIndex + 1} / ${_imagePaths.length}', '${_activeImageIndex + 1} of ${_imagePaths.length}'), style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900)),
                       ),
                     ),
                     Positioned(
@@ -458,11 +458,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.6), borderRadius: BorderRadius.circular(99)),
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(Icons.location_on, color: Colors.white, size: 12),
-                            SizedBox(width: 4),
-                            Text('Studio Hub', style: TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w800)),
+                            const Icon(Icons.location_on, color: Colors.white, size: 12),
+                            const SizedBox(width: 4),
+                            Text(tr(context, 'স্টুডিও হাব', 'Studio Hub'), style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w800)),
                           ],
                         ),
                       ),
@@ -543,7 +543,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                   onPressed: _aiEnhance,
                   style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
                   icon: const Icon(Icons.auto_awesome, size: 16),
-                  label: const Text('✨ AI Enhance', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                  label: Text(tr(context, '✨ এআই এনহ্যান্স', '✨ AI Enhance'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                 ),
               ],
             ),
@@ -591,9 +591,9 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
             // Char & Tag Counter
             Row(
               children: [
-                Text('$charCount / 2,200 chars', style: TextStyle(fontSize: 11.5, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
+                Text(tr(context, '$charCount / ২,২০০ অক্ষর', '$charCount / 2,200 chars'), style: TextStyle(fontSize: 11.5, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
                 const SizedBox(width: 12),
-                Text('$tagCount / 30 tags', style: TextStyle(fontSize: 11.5, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
+                Text(tr(context, '$tagCount / ৩০ টি ট্যাগ', '$tagCount / 30 tags'), style: TextStyle(fontSize: 11.5, color: scheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
                 const Spacer(),
                 Text(tr(context, 'অটো-সিঙ্কড', 'Auto-synced'), style: const TextStyle(fontSize: 11, color: AppColors.success, fontWeight: FontWeight.w800)),
               ],
@@ -744,7 +744,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
-                  child: const Text('Live Mockup', style: TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w900)),
+                  child: Text(tr(context, 'লাইভ মকআপ', 'Live Mockup'), style: const TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w900)),
                 ),
               ],
             ),
@@ -775,7 +775,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(authorName, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
-                            Text('Studio Hub', style: TextStyle(fontSize: 10.5, color: scheme.onSurfaceVariant)),
+                            Text(tr(context, 'স্টুডিও হাব', 'Studio Hub'), style: TextStyle(fontSize: 10.5, color: scheme.onSurfaceVariant)),
                           ],
                         ),
                       ],

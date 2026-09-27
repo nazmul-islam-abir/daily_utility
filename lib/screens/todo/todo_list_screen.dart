@@ -93,6 +93,14 @@ class _TodoListScreenState extends State<TodoListScreen> with SingleTickerProvid
       valueListenable: DataRefreshService.instance.notifier,
       builder: (context, _, __) {
         return Scaffold(
+      backgroundColor: scheme.surfaceContainerLow,
+      appBar: AppBar(
+        backgroundColor: scheme.surfaceContainerLow,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(tr(context, 'কাজ', 'Tasks')),
+      ),
       body: Container(
         decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [scheme.surfaceContainerLow, scheme.surface])),
         child: SafeArea(

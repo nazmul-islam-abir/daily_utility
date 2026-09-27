@@ -52,8 +52,12 @@ class BakiKhataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: Text(tr(context, 'বাকি খাতা', 'Baki Khata'))),
+      backgroundColor: scheme.surfaceContainerLow,
+      appBar: AppBar(
+        title: Text(tr(context, 'বাকি খাতা', 'Baki Khata')),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.bakiKhata,
         onPressed: () => _addPerson(context),
@@ -68,8 +72,11 @@ class BakiKhataScreen extends StatelessWidget {
             builder: (context, Box<LedgerEntry> ledgerBox, __) {
               double totalReceivable = 0, totalPayable = 0;
               final balances = <String, double>{};
+              int totalEntries = 0;
               for (final p in people) {
-                final bal = ledgerBox.values.where((e) => e.personId == p.id).fold(0.0, (s, e) => s + e.signedAmount);
+                final entries = ledgerBox.values.where((e) => e.personId == p.id);
+                totalEntries += entries.length;
+                final bal = entries.fold(0.0, (s, e) => s + e.signedAmount);
                 balances[p.id] = bal;
                 if (bal >= 0) {
                   totalReceivable += bal;
@@ -79,12 +86,39 @@ class BakiKhataScreen extends StatelessWidget {
               }
 
               if (people.isEmpty) {
-                return EmptyState(icon: Icons.people_outline, title: tr(context, 'কোনো ব্যক্তি যোগ করা হয়নি', 'No people yet'), message: tr(context, '+ বাটনে চেপে প্রথম ব্যক্তি যোগ করুন।', 'Tap + to add your first person.'));
+                return EmptyState(
+                  icon: Icons.people_outline,
+                  title: tr(context, 'কোনো ব্যক্তি যোগ করা হয়নি', 'No people yet'),
+                  message: tr(context, '+ বাটনে চেপে প্রথম ব্যক্তি যোগ করুন।', 'Tap + to add your first person.'),
+                );
               }
+
+              // Bilingual "X baki khata info" header so users see how many
+              // people + ledger entries are stored here.
+              final peopleCount = people.length;
+              final peopleLabelBn = '$peopleCount জন ব্যক্তি · $totalEntries টি লেনদেন';
+              final peopleLabelEn = '$peopleCount people · $totalEntries entries';
 
               return ListView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Icon(Icons.people_alt_rounded, size: 16, color: scheme.onSurfaceVariant),
+                        const SizedBox(width: 6),
+                        Text(
+                          tr(context, peopleLabelBn, peopleLabelEn),
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            color: scheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(child: StatPill(label: tr(context, 'মোট পাবেন', 'You will receive'), value: _fmt.format(totalReceivable), color: AppColors.success)),
@@ -103,13 +137,27 @@ class BakiKhataScreen extends StatelessWidget {
                           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => PersonDetailScreen(person: p))),
                           leading: CircleAvatar(
                             backgroundColor: AppColors.bakiKhata.withValues(alpha: 0.14),
-                            child: Text(p.name.isNotEmpty ? p.name[0].toUpperCase() : '?', style: const TextStyle(color: AppColors.bakiKhata, fontWeight: FontWeight.w800)),
+                            child: Text(
+                              p.name.isNotEmpty ? p.name[0].toUpperCase() : '?',
+                              style: const TextStyle(color: AppColors.bakiKhata, fontWeight: FontWeight.w800),
+                            ),
                           ),
                           title: Text(p.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                          subtitle: Text(bal == 0 ? tr(context, 'হিসাব মিটে গেছে', 'Settled up') : (theyOweYou ? tr(context, 'আপনি পাবেন', 'You will receive') : tr(context, 'আপনি দেবেন', 'You will pay'))),
+                          subtitle: Text(
+                            bal == 0
+                                ? tr(context, 'হিসাব মিটে গেছে', 'Settled up')
+                                : (theyOweYou
+                                    ? tr(context, 'আপনি পাবেন', 'You will receive')
+                                    : tr(context, 'আপনি দেবেন', 'You will pay')),
+                          ),
                           trailing: Text(
                             _fmt.format(bal.abs()),
-                            style: TextStyle(fontWeight: FontWeight.w800, color: bal == 0 ? AppColors.textMuted : (theyOweYou ? AppColors.success : AppColors.danger)),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              color: bal == 0
+                                  ? scheme.onSurfaceVariant
+                                  : (theyOweYou ? AppColors.success : AppColors.danger),
+                            ),
                           ),
                         ),
                       ),

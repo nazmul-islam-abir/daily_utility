@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/mood_entry.dart';
@@ -54,7 +55,13 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
 
   Future<void> _save() async {
     if (_mood == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr(context, 'একটি মেজাজ বেছে নিন', 'Pick a mood')), behavior: SnackBarBehavior.floating, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md))));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(tr(context, 'একটি মেজাজ বেছে নিন', 'Pick a mood')),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
+        ),
+      );
       return;
     }
     final existing = entryForDate(_date);
@@ -77,11 +84,20 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
       await HiveService.moods.put(entry.id, entry);
     }
     setState(() => _lastSavedAt = now);
-    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr(context, 'সংরক্ষিত!', 'Saved!')), behavior: SnackBarBehavior.floating, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md))));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(tr(context, 'সংরক্ষিত!', 'Saved!')),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
@@ -89,9 +105,41 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
         return ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
+            // Top section: "X mood entries" info badge.
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Icon(Icons.emoji_emotions_outlined, size: 16, color: scheme.onSurfaceVariant),
+                  const SizedBox(width: 6),
+                  ValueListenableBuilder(
+                    valueListenable: HiveService.moods.listenable(),
+                    builder: (context, _, __) {
+                      final count = HiveService.moods.length;
+                      return Text(
+                        tr(context, '$count টি মেজাজ এন্ট্রি', '$count mood entries'),
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          color: scheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
             Row(
               children: [
-                Text(tr(context, 'তারিখ বাছাই', 'SELECT DATE'), style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.6)),
+                Text(
+                  tr(context, 'তারিখ বাছাই', 'SELECT DATE'),
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w800,
+                    color: scheme.onSurfaceVariant,
+                    letterSpacing: 0.6,
+                  ),
+                ),
                 const Spacer(),
                 Text(_formatMonth(_date), style: const TextStyle(fontWeight: FontWeight.w800)),
               ],
@@ -120,16 +168,32 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
                       duration: AppAnimations.fast,
                       width: 56,
                       decoration: BoxDecoration(
-                        color: isSelected ? AppColors.text : AppColors.surface,
+                        color: isSelected ? scheme.primary : scheme.surface,
                         borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.4)),
                       ),
                       alignment: Alignment.center,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][d.weekday - 1], style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: isSelected ? Colors.white70 : AppColors.textMuted, letterSpacing: 0.6)),
+                          Text(
+                            ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][d.weekday - 1],
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: isSelected ? scheme.onPrimary.withValues(alpha: 0.85) : scheme.onSurfaceVariant,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
                           const SizedBox(height: 4),
-                          Text('${d.day}', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: isSelected ? Colors.white : AppColors.text)),
+                          Text(
+                            '${d.day}',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                              color: isSelected ? scheme.onPrimary : scheme.onSurface,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -140,18 +204,34 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFE0EAFF), Color(0xFFF2F4F8)]), borderRadius: BorderRadius.circular(AppRadius.xl)),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: AppColors.cardGradient(AppColors.mood),
+                ),
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(tr(context, 'দৈনিক প্রম্পট', 'Daily Prompt'), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.4)),
+                  Text(
+                    tr(context, 'দৈনিক প্রম্পট', 'Daily Prompt'),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: scheme.onSurfaceVariant, letterSpacing: 0.4),
+                  ),
                   const SizedBox(height: 8),
-                  Text(tr(context, _kPrompts[_promptIndex][0], _kPrompts[_promptIndex][1]), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.text, height: 1.2)),
+                  Text(
+                    tr(context, _kPrompts[_promptIndex][0], _kPrompts[_promptIndex][1]),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: scheme.onSurface, height: 1.2),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 18),
-            Text(tr(context, 'আপনি কেমন বোধ করছেন?', 'HOW ARE YOU FEELING?'), style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.6)),
+            Text(
+              tr(context, 'আপনি কেমন বোধ করছেন?', 'HOW ARE YOU FEELING?'),
+              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: scheme.onSurfaceVariant, letterSpacing: 0.6),
+            ),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -168,7 +248,11 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: selected ? color.withValues(alpha: 0.18) : AppColors.surface,
+                      color: selected ? color.withValues(alpha: 0.18) : scheme.surfaceContainerHigh,
+                      border: Border.all(
+                        color: selected ? color : Colors.transparent,
+                        width: 2,
+                      ),
                     ),
                     child: Text(moodEmojis[i], style: const TextStyle(fontSize: 26)),
                   ),
@@ -179,45 +263,65 @@ class _MoodLoggerScreenState extends State<MoodLoggerScreen> {
             Center(
               child: AnimatedSwitcher(
                 duration: AppAnimations.fast,
-                child: _mood == 0 ? const SizedBox.shrink() : Text(moodLabel(context, _mood), key: ValueKey(_mood), style: TextStyle(fontWeight: FontWeight.w800, color: moodColors[_mood - 1])),
+                child: _mood == 0
+                    ? const SizedBox.shrink()
+                    : Text(
+                        moodLabel(context, _mood),
+                        key: ValueKey(_mood),
+                        style: TextStyle(fontWeight: FontWeight.w800, color: moodColors[_mood - 1]),
+                      ),
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Text(tr(context, 'আজকের প্রতিফলন', "TODAY'S REFLECTION"), style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: AppColors.textMuted, letterSpacing: 0.6)),
-                const Spacer(),
-                IconButton(icon: const Icon(Icons.image_outlined), onPressed: () {}, tooltip: 'image'),
-                IconButton(icon: const Icon(Icons.mic_none_outlined), onPressed: () {}, tooltip: 'mic'),
-              ],
+            Text(
+              tr(context, 'আজকের প্রতিফলন', "TODAY'S REFLECTION"),
+              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: scheme.onSurfaceVariant, letterSpacing: 0.6),
             ),
             const SizedBox(height: 8),
             Container(
               height: 180,
               padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(AppRadius.lg)),
+              decoration: BoxDecoration(
+                color: scheme.surface,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.4)),
+              ),
               child: TextField(
                 controller: _body,
                 maxLines: null,
                 expands: true,
-                decoration: InputDecoration.collapsed(hintText: tr(context, 'আপনার ভাবনা এখানে লিখুন…', 'Write your thoughts here…'), border: InputBorder.none, fillColor: Colors.transparent),
+                style: TextStyle(color: scheme.onSurface, fontSize: 14),
+                decoration: InputDecoration.collapsed(
+                  hintText: tr(context, 'আপনার ভাবনা এখানে লিখুন…', 'Write your thoughts here…'),
+                  hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+                  border: InputBorder.none,
+                  fillColor: Colors.transparent,
+                ),
               ),
             ),
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
-              child: Text('${_body.text.split(RegExp(r"\s+")).where((s) => s.isNotEmpty).length} ${tr(context, 'শব্দ', 'words')}', style: const TextStyle(color: AppColors.textDim, fontSize: 12)),
+              child: Text(
+                '${_body.text.split(RegExp(r"\s+")).where((s) => s.isNotEmpty).length} ${tr(context, 'শব্দ', 'words')}',
+                style: TextStyle(color: scheme.outline, fontSize: 12),
+              ),
             ),
             const SizedBox(height: 16),
             FilledButton.icon(
-              style: FilledButton.styleFrom(backgroundColor: AppColors.text, foregroundColor: Colors.white, minimumSize: const Size(0, 56)),
+              style: FilledButton.styleFrom(backgroundColor: AppColors.mood, foregroundColor: Colors.white, minimumSize: const Size(0, 56)),
               onPressed: _save,
               icon: const Icon(Icons.check),
               label: Text(tr(context, 'এন্ট্রি সংরক্ষণ', 'Save Entry'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
             ),
             if (_lastSavedAt != null) ...[
               const SizedBox(height: 14),
-              Center(child: Text(tr(context, 'সর্বশেষ সংরক্ষণ: ${_ago(_lastSavedAt!)}', 'Last saved: ${_ago(_lastSavedAt!)}'), style: const TextStyle(fontSize: 12.5, color: AppColors.textMuted))),
+              Center(
+                child: Text(
+                  tr(context, 'সর্বশেষ সংরক্ষণ: ${_ago(_lastSavedAt!)}', 'Last saved: ${_ago(_lastSavedAt!)}'),
+                  style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant),
+                ),
+              ),
             ],
           ],
         );

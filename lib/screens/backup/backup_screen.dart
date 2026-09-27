@@ -121,7 +121,7 @@ class _BackupScreenState extends State<BackupScreen> {
             const SizedBox(height: 16),
             _actionsCard(scheme: scheme),
             const SizedBox(height: 16),
-            _infoCard(),
+            _infoCard(scheme: scheme),
           ],
         );
 
@@ -205,12 +205,18 @@ class _BackupScreenState extends State<BackupScreen> {
                 width: 40,
                 height: 40,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
-                child: const Icon(Icons.file_upload_outlined, color: AppColors.primary, size: 22),
+                decoration: BoxDecoration(color: scheme.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+                child: Icon(Icons.file_upload_outlined, color: scheme.primary, size: 22),
               ),
-              title: Text(tr(context, 'ব্যাকআপ ফাইল তৈরি ও শেয়ার', 'Create & share backup file'), style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text(tr(context, 'সব লোকাল ডেটার একটি .json ফাইল তৈরি করে WhatsApp / ইমেইল / Drive / Downloads-এ সেভ করুন', 'Generate a .json file with all local data and save to WhatsApp / Email / Drive / Downloads'), style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant)),
-              trailing: _busy ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.chevron_right),
+              title: Text(
+                tr(context, 'ব্যাকআপ ফাইল তৈরি ও শেয়ার', 'Create & share backup file'),
+                style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurface),
+              ),
+              subtitle: Text(
+                tr(context, 'সব লোকাল ডেটার একটি .json ফাইল তৈরি করে WhatsApp / ইমেইল / Drive / Downloads-এ সেভ করুন', 'Generate a .json file with all local data and save to WhatsApp / Email / Drive / Downloads'),
+                style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+              ),
+              trailing: _busy ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : Icon(Icons.chevron_right, color: scheme.outline),
               onTap: _busy ? null : _exportNow,
             ),
             const Divider(height: 1),
@@ -219,12 +225,18 @@ class _BackupScreenState extends State<BackupScreen> {
                 width: 40,
                 height: 40,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
-                child: const Icon(Icons.file_download_outlined, color: AppColors.primary, size: 22),
+                decoration: BoxDecoration(color: scheme.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+                child: Icon(Icons.file_download_outlined, color: scheme.primary, size: 22),
               ),
-              title: Text(tr(context, 'ব্যাকআপ থেকে রিস্টোর', 'Restore from backup file'), style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text(tr(context, 'আগের তৈরি করা .json ফাইল থেকে ডেটা ফিরিয়ে আনুন', 'Pick a previously saved .json and bring its data back'), style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant)),
-              trailing: _busy ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.chevron_right),
+              title: Text(
+                tr(context, 'ব্যাকআপ থেকে রিস্টোর', 'Restore from backup file'),
+                style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurface),
+              ),
+              subtitle: Text(
+                tr(context, 'আগের তৈরি করা .json ফাইল থেকে ডেটা ফিরিয়ে আনুন', 'Pick a previously saved .json and bring its data back'),
+                style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
+              ),
+              trailing: _busy ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : Icon(Icons.chevron_right, color: scheme.outline),
               onTap: _busy ? null : _importNow,
             ),
           ],
@@ -233,7 +245,7 @@ class _BackupScreenState extends State<BackupScreen> {
     );
   }
 
-  Widget _infoCard() {
+  Widget _infoCard({required ColorScheme scheme}) {
     const boxes = <(IconData, String, String)>[
       (Icons.check_circle_outline, 'কাজ', 'Tasks'),
       (Icons.sticky_note_2_outlined, 'নোট', 'Notes'),
@@ -248,41 +260,59 @@ class _BackupScreenState extends State<BackupScreen> {
       (Icons.history_rounded, 'ক্যালকুলেটর ইতিহাস', 'Calculator history'),
     ];
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.06), borderRadius: BorderRadius.circular(AppRadius.xl)),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.lock_outline, size: 18, color: AppColors.primary),
+              Icon(Icons.lock_outline, size: 20, color: scheme.primary),
               const SizedBox(width: 8),
-              Text(tr(context, 'নিরাপদ ও ব্যক্তিগত', 'Safe & private'), style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.primary)),
+              Text(
+                tr(context, 'নিরাপদ ও ব্যক্তিগত', 'Safe & private'),
+                style: TextStyle(fontWeight: FontWeight.w900, color: scheme.primary, fontSize: 15),
+              ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             tr(context, 
               'ব্যাকআপ ফাইলটি কোনো সার্ভারে যায় না। আপনি নিজে শেয়ার বা সেভ করেন — ইমেইল, WhatsApp, অথবা আপনার নিজের Drive / Dropbox-এ। ফাইলটি পুরোপুরি আপনার হাতে।',
               'The backup file never leaves your phone through our servers. You choose where to save it — email, WhatsApp, or your own Drive / Dropbox. The file stays entirely in your hands.',
             ),
-            style: const TextStyle(fontSize: 12.5, color: AppColors.text, height: 1.4),
+            style: TextStyle(fontSize: 13, color: scheme.onSurface, height: 1.45),
           ),
-          const SizedBox(height: 12),
-          Text(tr(context, 'কী কী ব্যাকআপ হয়', 'What gets backed up'), style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
+          Text(
+            tr(context, 'কী কী ব্যাকআপ হয়', 'What gets backed up'),
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: scheme.onSurface),
+          ),
+          const SizedBox(height: 10),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: boxes
                 .map((b) => Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(999)),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(b.$1, size: 12, color: AppColors.primary),
-                        const SizedBox(width: 4),
-                        Text(tr(context, b.$2, b.$3), style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: AppColors.primary)),
-                      ]),
+                      decoration: BoxDecoration(
+                        color: scheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(b.$1, size: 12, color: scheme.onPrimaryContainer),
+                          const SizedBox(width: 4),
+                          Text(
+                            tr(context, b.$2, b.$3),
+                            style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: scheme.onPrimaryContainer),
+                          ),
+                        ],
+                      ),
                     ))
                 .toList(),
           ),

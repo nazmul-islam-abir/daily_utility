@@ -78,12 +78,13 @@ class _VaultEditorScreenState extends State<VaultEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final isEdit = widget.existing != null;
     return ValueListenableBuilder<Locale>(
       valueListenable: LocaleService.instance.notifier,
       builder: (context, locale, _) {
         return Scaffold(
-          backgroundColor: AppColors.bg,
+          backgroundColor: scheme.surfaceContainerLow,
           appBar: AppBar(title: Text(isEdit ? tr(context, 'সম্পাদনা', 'Edit') : tr(context, 'নতুন ক্রেডেনশিয়াল', 'New credential'))),
           body: ListView(
             padding: const EdgeInsets.all(16),
@@ -95,17 +96,20 @@ class _VaultEditorScreenState extends State<VaultEditorScreen> {
               _passwordField(),
               const SizedBox(height: 12),
               _field(tr(context, 'URL (ঐচ্ছিক)', 'URL (optional)'), _url),
-              const SizedBox(height: 12),
-              Text(tr(context, 'ক্যাটেগরি', 'Category'), style: const TextStyle(fontWeight: FontWeight.w800)),
+              const SizedBox(height: 16),
+              Text(
+                tr(context, 'ক্যাটেগরি', 'Category'),
+                style: TextStyle(fontWeight: FontWeight.w800, color: scheme.onSurface),
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _chip('banking', tr(context, 'ব্যাংকিং', 'Banking'), Icons.account_balance_outlined),
-                  _chip('social', tr(context, 'সোশ্যাল', 'Social'), Icons.mail_outline),
-                  _chip('work', tr(context, 'কাজ', 'Work'), Icons.work_outline),
-                  _chip('other', tr(context, 'অন্যান্য', 'Other'), Icons.lock_outline),
+                  _chip(context, 'banking', tr(context, 'ব্যাংকিং', 'Banking'), Icons.account_balance_outlined),
+                  _chip(context, 'social', tr(context, 'সোশ্যাল', 'Social'), Icons.mail_outline),
+                  _chip(context, 'work', tr(context, 'কাজ', 'Work'), Icons.work_outline),
+                  _chip(context, 'other', tr(context, 'অন্যান্য', 'Other'), Icons.lock_outline),
                 ],
               ),
               const SizedBox(height: 24),
@@ -128,19 +132,23 @@ class _VaultEditorScreenState extends State<VaultEditorScreen> {
         obscureText: _obscure,
         decoration: InputDecoration(
           labelText: tr(context, 'পাসওয়ার্ড', 'Password'),
-          suffixIcon: IconButton(icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined), onPressed: () => setState(() => _obscure = !_obscure)),
+          suffixIcon: IconButton(
+            icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+            onPressed: () => setState(() => _obscure = !_obscure),
+          ),
         ),
       );
 
-  Widget _chip(String key, String label, IconData icon) {
+  Widget _chip(BuildContext context, String key, String label, IconData icon) {
+    final scheme = Theme.of(context).colorScheme;
     final selected = _category == key;
     return ChoiceChip(
       label: Text(label),
-      avatar: Icon(icon, size: 16),
+      avatar: Icon(icon, size: 16, color: selected ? AppColors.vault : null),
       selected: selected,
       onSelected: (_) => setState(() => _category = key),
       selectedColor: AppColors.vault.withValues(alpha: 0.18),
-      labelStyle: TextStyle(color: selected ? AppColors.vault : AppColors.text, fontWeight: FontWeight.w700),
+      labelStyle: TextStyle(color: selected ? AppColors.vault : scheme.onSurface, fontWeight: FontWeight.w700),
     );
   }
 }
