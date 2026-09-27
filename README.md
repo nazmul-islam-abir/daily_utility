@@ -14,17 +14,15 @@
 
 A single Material-3 Flutter app that ships **20+ daily-life features** end-to-end. Everything personal is stored **offline on the device** (Hive) — only public content (notice board, quiz categories) is fetched from Firebase Firestore.
 
-| | |
-|---|---|
-| 🏠 **Home dashboard** | Mood selector · today's habits · active stories carousel · post studio · quick-launch chips |
-| ✅ **Productivity** | Tasks (priority / recurrence / due date / reminder), Notes (checklists + colour tags) |
-| 💸 **Finance** | Income/Expense with category breakdown, **Baki Khata** (people ledger), **Loan** tracker with EMI & reminders, **Subscriptions** (BDT/USD) |
-| 🧮 **Utilities** | Calculator hub (20+ tools, 5 categories), **Unit Converter**, **Date Tools** (age / countdown / calendar) |
-| 📿 **Lifestyle** | **Habit** tracker (streaks), **Mood / Daily Reflect**, **Shopping List**, **Prayer & Qibla** (offline via `adhan_dart`), **Reminders** |
-| 🛡️ **Security** | **Password Vault** (weak/compromised detection) |
-| 💬 **Social** | Posts feed + **Broadcast Studio** (carousel deck + AI Enhance) |
-| 📰 **Content** | **Notice board** (Firestore), **Quiz** (Firestore, multi-category) |
-| ⚙️ **System** | Profile, **Settings** (Bangla/English + theme), **Backup & Restore** (.json on-device), **Contact us** (Firestore) |
+- 🏠 **Home dashboard** — mood · habits · stories carousel · post studio · quick-launch chips
+- ✅ **Productivity** — Tasks (priority / recurrence / due date / reminder), Notes (checklists + colour tags)
+- 💸 **Finance** — Income/Expense, **Baki Khata** (people ledger), **Loan** tracker, **Subscriptions** (BDT/USD)
+- 🧮 **Utilities** — Calculator hub (20+ tools / 5 categories), **Unit Converter**, **Date Tools**
+- 📿 **Lifestyle** — **Habit** tracker, **Mood / Daily Reflect**, **Shopping List**, **Prayer & Qibla** (offline via `adhan_dart`), **Reminders**
+- 🛡️ **Security** — **Password Vault** (weak/compromised detection)
+- 💬 **Social** — Posts feed + **Broadcast Studio** (carousel deck + AI Enhance)
+- 📰 **Content** — **Notice board** (Firestore), **Quiz** (Firestore, multi-category)
+- ⚙️ **System** — Profile, **Settings** (Bangla/English + theme), **Backup & Restore** (.json on-device), **Contact us** (Firestore)
 
 > 100 % Material 3 · fully responsive · dark theme first · bilingual (English / বাংলা) · built to be **boring on purpose** so your data stays yours.
 
@@ -32,31 +30,37 @@ A single Material-3 Flutter app that ships **20+ daily-life features** end-to-en
 
 ## 📸 Screenshots
 
+> All screenshots are resized to 540 px wide so the README stays readable on mobile. Tap any image to open the original at full size.
+
 ### Home & Dashboard
 
-| Home Dashboard | Drawer (More menu) |
-|---|---|
-| ![Home](app_images/Screenshot_20260927_063438.png) | ![Drawer](app_images/Screenshot_20260927_064642.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063438.png" width="280" alt="Home dashboard — quick-launch chips, mood selector, today's habits, stories carousel, post studio" />
+&nbsp;&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_064642.png" width="280" alt="Side drawer / More menu with profile, task counts, finance shortcuts, and bottom nav" />
+</p>
 
-Quick-access chips for every section, today's mood emoji, today's habits at a glance, your active stories carousel, and the **Studio** button to publish a new post — all from one screen.
+Quick-access chips for every section, today's mood emoji, today's habits at a glance, your active stories carousel, and a **Studio** button to publish a new post — all from one screen.
 
 ---
 
 ### Productivity
 
 #### ✅ Tasks
-
-| Active list | New task editor |
-|---|---|
-| ![Tasks](app_images/Screenshot_20260927_063501.png) | ![New task](app_images/Screenshot_20260927_063626.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063501.png" width="280" alt="Tasks active list with progress badge and tabs" />
+&nbsp;&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_063626.png" width="280" alt="New task editor with priority, recurrence, due date" />
+</p>
 
 Priority · due date+time · recurrence (Once / Daily / Weekly / Monthly) · optional reminder 5 / 10 / 20 / 30 / 45 / 60 min before · completed-history tab.
 
 #### 📝 Notes
-
-| Quick-add (colour tags) | Full editor |
-|---|---|
-| ![Notes quick-add](app_images/Screenshot_20260927_063646.png) | ![Notes editor](app_images/Screenshot_20260927_063656.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063646.png" width="280" alt="Notes quick-add modal with colour tags" />
+&nbsp;&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_063656.png" width="280" alt="Notes full editor for Parkinson's research note" />
+</p>
 
 Text or checklist notes, pin-to-top, 7 colour tags.
 
@@ -64,17 +68,25 @@ Text or checklist notes, pin-to-top, 7 colour tags.
 
 ### Finance
 
-| Baki Khata (people ledger) | Finance dashboard | Loan tracker |
-|---|---|---|
-| ![Baki Khata](app_images/Screenshot_20260927_063729.png) | ![Finance](app_images/Screenshot_20260927_063738.png) | ![Loan](app_images/Screenshot_20260927_063707.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063729.png" width="220" alt="Baki Khata — people ledger with receivable and payable" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_063738.png" width="220" alt="Finance dashboard — balance, income/expense, spending by category" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_063707.png" width="220" alt="Loan list with progress bars" />
+</p>
 
-| New loan | New transaction | Subscriptions |
-|---|---|---|
-| ![New loan](app_images/Screenshot_20260927_063751.png) | ![Transaction](app_images/Screenshot_20260927_063718.png) | ![Subs](app_images/Screenshot_20260927_064112.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063751.png" width="220" alt="New loan form" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_063718.png" width="220" alt="New transaction form — expense/income toggle, category chips" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_064112.png" width="220" alt="Subscriptions hub — monthly spend, search, list" />
+</p>
 
-| New subscription | |
-|---|---|
-| ![New sub](app_images/Screenshot_20260927_064237.png) | |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064237.png" width="280" alt="New subscription form — title, amount, currency, billing cycle, next renewal, category" />
+</p>
 
 Running balance for each person, per-category spend bars, instalment progress with reminders, and a Netflix/Spotify-grade subscription manager with custom billing cycles & currency.
 
@@ -84,31 +96,33 @@ Running balance for each person, per-category spend bars, instalment progress wi
 
 20+ calculators organised into 5 categories. Dark-theme friendly, instant results, optional history.
 
-| Calculator hub | Unit Converter |
-|---|---|
-| ![Calculator hub](app_images/Screenshot_20260927_063826.png) | ![Unit Converter](app_images/Screenshot_20260927_063906.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063826.png" width="280" alt="Calculator hub — General, Education, Health, Finance, BD Special" />
+&nbsp;&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_063906.png" width="280" alt="Unit Converter with Length / Weight / Temp / Volume tabs and a 1 m -> 0.001 km example" />
+</p>
 
 Categories: **General** (basic · percent · discount · tip · bill split) · **Education** (GPA · CGPA · marks % · attendance) · **Health** (BMI · BMR · ideal weight · water intake) · **Finance** (EMI · savings · simple interest · VAT) · **BD Special** (decimal↔katha↔bigha↔acre · feet↔হাত · salary breakdown · electricity-bill estimator).
 
-Health calculators carry an explicit "not medical advice" banner.
+> Health calculators carry an explicit "not medical advice" banner.
 
 ---
 
 ### Date Tools hub
 
-| Date Tools — Countdown tab |
-|---|
-| ![Date tools](app_images/Screenshot_20260927_064250.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064250.png" width="280" alt="Date Tools — Countdown tab with event 'পরীক্ষা'" />
+</p>
 
-Tabs: **Age** · **Days Between** · **Countdown** (shown above with event "পরীক্ষা") · **Calendar** (Flutter's built-in `CalendarDatePicker`).
+Tabs: **Age** · **Days Between** · **Countdown** (shown above) · **Calendar** (Flutter's built-in `CalendarDatePicker`).
 
 ---
 
 ### Shopping List
 
-| Shopping List |
-|---|
-| ![Shopping](app_images/Screenshot_20260927_063839.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_063839.png" width="280" alt="Shopping list with qty chips and check-off" />
+</p>
 
 Tap-add with optional qty · check off · clear-checked.
 
@@ -116,9 +130,9 @@ Tap-add with optional qty · check off · clear-checked.
 
 ### Vault — password manager
 
-| Vault dashboard |
-|---|
-| ![Vault](app_images/Screenshot_20260927_064404.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064404.png" width="280" alt="Password Vault dashboard with security health meter and weak / compromised counts" />
+</p>
 
 Searchable, categorised (Banking / Social / Work / …) · show/hide password · copy button · inline **Weak / Compromised** health meter.
 
@@ -126,9 +140,11 @@ Searchable, categorised (Banking / Social / Work / …) · show/hide password ·
 
 ### Social — Posts & Broadcast Studio
 
-| Posts feed | Broadcast Studio |
-|---|---|
-| ![Posts](app_images/Screenshot_20260927_064418.png) | ![Broadcast Studio](app_images/Screenshot_20260927_064450.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064418.png" width="280" alt="Posts feed with search and category chips" />
+&nbsp;&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_064450.png" width="280" alt="Broadcast Studio — multi-photo carousel editor with AI Enhance and Publish Broadcast" />
+</p>
 
 A lightweight feed with search · tabs (All / Pinned / Diary / Thoughts) · a **Broadcast Studio** with multi-photo carousel editor, category chips, AI Enhance hint, and Publish Broadcast button.
 
@@ -136,13 +152,13 @@ A lightweight feed with search · tabs (All / Pinned / Diary / Thoughts) · a **
 
 ### Habits, Mood & Daily Reflect
 
-| Habits dashboard | Daily Reflect |
-|---|---|
-| ![Habits](app_images/Screenshot_20260927_064127.png) | ![Daily Reflect](app_images/Screenshot_20260927_064141.png) |
-
-| New habit | |
-|---|---|
-| ![New habit](app_images/Screenshot_20260927_064153.png) | |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064127.png" width="220" alt="Habits dashboard — streak, consistency, weekly view, today's habits" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_064141.png" width="220" alt="Daily Reflect — date strip, daily prompt, emoji selector, reflection text" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_064153.png" width="220" alt="New habit editor — title, subtitle, icon grid, colour palette, recurrence" />
+</p>
 
 Current streak + consistency % · weekly view (Mon–Sun) · per-day check · 14 hand-picked icons · 8 colour accents · recurrence (Daily / Weekly) · Monthly trend card.
 
@@ -152,43 +168,49 @@ Current streak + consistency % · weekly view (Mon–Sun) · per-day check · 14
 
 ### Prayer & Qibla (fully offline)
 
-| Today's schedule | Live Qibla compass |
-|---|---|
-| ![Prayer schedule](app_images/Screenshot_20260927_064606.png) | ![Qibla compass](app_images/Screenshot_20260927_064619.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064606.png" width="280" alt="Prayer schedule — Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha with Qibla bearing & heading and Tasbih counter" />
+&nbsp;&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_064619.png" width="280" alt="Live Qibla compass with bearing 279.3°, heading 235°, GPS Detect and Pick City actions" />
+</p>
 
 All five waqts · Bangladeshi preset cities · GPS detect · **Live Qibla compass** with bearing (°) & heading (°) · Tasbih counter · per-waqt reminders.
 
 ---
 
-### Reminders, Quiz, Notices
+### Reminders
 
-| Aggregated Reminders | Quiz | Notice Board |
-|---|---|---|
-| ![Reminders](app_images/Screenshot_20260927_064554.png) | (see Firestore section below) | (see Firestore section below) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_064554.png" width="280" alt="Aggregated reminders — Goto Gynm, Need to buy fan, Bank loan instalment" />
+</p>
 
 **Reminders** is one sorted list of every reminder created across Tasks and Loans — no separate "medicine reminder" screen, just create a recurring Todo.
 
+> 📰 Notice board and 🧠 Quiz are fetched live from Firestore — see the **Firebase setup** section below for the schemas used to publish content from the console.
+
 ---
 
-### Profile, Settings, Backup, Contact us
+### Profile, Settings, Backup, Contact us, History
 
-| Profile | Settings |
-|---|---|
-| ![Profile](app_images/Screenshot_20260927_073936.png) | ![Settings](app_images/Screenshot_20260927_073951.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_073936.png" width="220" alt="Profile screen — avatar, identity, home city, settings shortcut" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_073951.png" width="220" alt="Settings — language Bangla/English, backup, theme, clear history" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_065836.png" width="220" alt="Backup & Restore — create & share backup file, restore from backup file, safe & private note" />
+</p>
 
-| Backup & Restore | Contact us |
-|---|---|
-| ![Backup](app_images/Screenshot_20260927_065836.png) | ![Contact us](app_images/Screenshot_20260927_065845.png) |
+<p align="center">
+  <img src="app_images/sm/Screenshot_20260927_065845.png" width="220" alt="Contact us form — name, email, 2000-char message, send button" />
+&nbsp;&nbsp;
+  <img src="app_images/sm/Screenshot_20260927_065811.png" width="220" alt="Calculator history with All / Calculator / Finance / Notes filters" />
+</p>
 
-| Calculator history | |
-|---|---|
-| ![History](app_images/Screenshot_20260927_065811.png) | |
-
-**Profile** — avatar, display name, bio, home city, settings shortcut.
-**Settings** — Profile · Language (বাংলা / English) · Backup & restore · Theme (System / Light / Dark) · Clear history.
-**Backup** — generates a single `.json` with *everything* (tasks, notes, finance, baki, loans, shopping, habits, mood, vault, quiz results, calculator history), lets you share it via WhatsApp / Email / Drive / Downloads. Restore by picking the file. **Safe & private** — the file never leaves your phone through a server.
-**Contact us** — name + email + 2000-char message → directly stores a document in `contact_messages` Firestore (privacy footnote included).
-**Calculator history** — filterable log of every prior calculation & transaction grouped by tool.
+- **Profile** — avatar, display name, bio, home city, settings shortcut.
+- **Settings** — Profile · Language (বাংলা / English) · Backup & restore · Theme (System / Light / Dark) · Clear history.
+- **Backup** — generates a single `.json` with *everything* (tasks, notes, finance, baki, loans, shopping, habits, mood, vault, quiz results, calculator history). Share via WhatsApp / Email / Drive / Downloads. **Safe & private** — the file never leaves your phone through a server.
+- **Contact us** — name + email + 2000-char message → directly stores a document in `contact_messages` Firestore.
+- **Calculator history** — filterable log of every prior calculation & transaction grouped by tool.
 
 ---
 
@@ -279,14 +301,14 @@ The app talks to **one** Firestore project. Three collections are touched at run
 
 ### `quiz_categories/{docId}`
 
-| Field       | Type     | Required | Notes                                      |
-|-------------|----------|----------|--------------------------------------------|
-| `name`      | string   | yes      | Display title (e.g. `"Physics"`)          |
-| `subtitle`  | string   | no       | Shown under title                          |
+| Field       | Type     | Required | Notes                                                                                  |
+|-------------|----------|----------|----------------------------------------------------------------------------------------|
+| `name`      | string   | yes      | Display title (e.g. `"Physics"`)                                                       |
+| `subtitle`  | string   | no       | Shown under title                                                                      |
 | `icon`      | string   | no       | One of: `science`, `physics`, `chemistry`, `biology`, `math`, `history`, `geography`, `gk`, `art`, `language`, `sports`, `music`, `movies`, `tech` |
-| `color`     | string   | no       | Hex like `0xFF14B8A6` or `#14B8A6`         |
-| `order`     | number   | no       | Ascending sort key                         |
-| `questions` | array    | yes      | `[{q, options[4], answer, hint?}]`         |
+| `color`     | string   | no       | Hex like `0xFF14B8A6` or `#14B8A6`                                                     |
+| `order`     | number   | no       | Ascending sort key                                                                     |
+| `questions` | array    | yes      | `[{q, options[4], answer, hint?}]`                                                     |
 
 Question shape:
 ```json
@@ -368,6 +390,16 @@ flutter run
 
 To point the app at your own Firestore project, edit `lib/firebase_options.dart` with your project's credentials.
 
+### 4. Re-generating the screenshot thumbnails
+
+If you capture new screenshots at `app_images/Screenshot_*.png`, regenerate the mobile-friendly versions with:
+
+```bash
+python scripts/resize_screenshots.py
+```
+
+It writes resized copies to `app_images/sm/` at 540 px wide.
+
 ---
 
 ## 📁 Project structure (high-level)
@@ -436,6 +468,12 @@ lib/
 │   └── ...
 │
 └── l10n_strings.dart              # bilingual tr(context, bn, en) helper
+
+scripts/
+└── resize_screenshots.py          # regenerates app_images/sm/ from originals
+
+app_images/                        # Original full-size screenshots (gitignored if huge)
+app_images/sm/                     # 540 px wide thumbnails used in README
 ```
 
 ---
@@ -463,7 +501,7 @@ lib/
 
 ## 🤝 Contributing
 
-PRs welcome — keep new features behind a single screen + a single service, and follow the existing `ValueNotifier` + `Theme.of(context).colorScheme` patterns. Read `SETUP_AND_FEATURES.md` for the deeper architecture notes.
+PRs welcome — keep new features behind a single screen + a single service, and follow the existing `ValueNotifier` + `Theme.of(context).colorScheme` patterns. See `SETUP_AND_FEATURES.md` for the deeper architecture notes.
 
 ## 📜 License
 
