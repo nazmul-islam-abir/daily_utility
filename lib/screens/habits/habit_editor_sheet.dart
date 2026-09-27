@@ -4,31 +4,9 @@ import 'package:uuid/uuid.dart';
 import '../../models/habit.dart';
 import '../../services/hive_service.dart';
 import '../../services/locale_service.dart';
+import 'habit_icons.dart';
 
 const _uuid = Uuid();
-
-IconData _iconFromCode(int cp) {
-  // ignore: non_const_argument_for_const_parameter
-  return IconData(cp, fontFamily: 'MaterialIcons', matchTextDirection: false);
-}
-
-const _kIconChoices = [
-  Icons.spa_outlined,
-  Icons.self_improvement,
-  Icons.local_drink_outlined,
-  Icons.directions_run,
-  Icons.book_outlined,
-  Icons.bedtime_outlined,
-  Icons.fitness_center,
-  Icons.brush_outlined,
-  Icons.music_note_outlined,
-  Icons.savings_outlined,
-  Icons.restaurant_outlined,
-  Icons.code,
-  Icons.headphones,
-  Icons.directions_bike,
-  Icons.pool,
-];
 
 const _kColorChoices = [
   0xFF14B8A6, 0xFF6366F1, 0xFF3D5AFE, 0xFFF59E0B, 0xFFEC4899, 0xFF10B981, 0xFFEF4444, 0xFF8B5CF6,
@@ -57,7 +35,7 @@ class _HabitEditorSheetState extends State<HabitEditorSheet> {
     final e = widget.existing;
     _title = TextEditingController(text: e?.title ?? '');
     _subtitle = TextEditingController(text: e?.subtitle ?? '');
-    _icon = e == null ? Icons.spa_outlined : _iconFromCode(e.iconCodePoint);
+    _icon = e == null ? Icons.spa_outlined : habitIconFromCode(e.iconCodePoint);
     _colorValue = e?.colorValue ?? _kColorChoices.first;
     _recurrence = e?.recurrence ?? 'daily';
     _days = Set.of(e?.daysOfWeek ?? const [1, 2, 3, 4, 5, 6, 7]);
@@ -146,7 +124,7 @@ class _HabitEditorSheetState extends State<HabitEditorSheet> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _kIconChoices.map((i) {
+                    children: kHabitIconChoices.map((i) {
                       final sel = i.codePoint == _icon.codePoint;
                       final accent = Color(_colorValue);
                       return GestureDetector(

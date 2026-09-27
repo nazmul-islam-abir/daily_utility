@@ -22,6 +22,170 @@
 
 ---
 
+## ✨ Features — everything you can do
+
+A single Flutter app that ships **20+ daily-life features** end-to-end. Everything personal is stored **offline on the device** (Hive) — only public content (notice board, quiz categories) is fetched from Firebase Firestore. 100 % Material 3 · fully responsive · dark theme first · bilingual (English / বাংলা).
+
+> Below is **every action you can perform** inside the app, grouped by section.
+
+### 🏠 Home & Dashboard
+- See today's **mood emoji** + change it in one tap
+- View **today's habit checklist** at a glance
+- Open the side-drawer **More** menu (profile, task counts, finance shortcuts, bottom nav)
+- Browse the active **Stories carousel**
+- **Quick-launch** any section via chips (Tasks, Notes, Finance, Calculator, Vault, etc.)
+- Open the **Studio** to publish a new post
+
+### ✅ Tasks (Todo)
+- Create a task with **priority** (Low / Med / High)
+- Set a **due date + time**
+- Pick **recurrence** (Once / Daily / Weekly / Monthly) — completing rolls the task to its next date
+- Attach an optional **reminder** (5 / 10 / 20 / 30 / 45 / 60 min before)
+- View the **Active** vs **Completed History** tabs
+- See a **progress badge** on the active list
+- **Swipe to delete** · **search** · **sort**
+
+### 📝 Notes
+- Create **text notes** or **checklist** notes
+- **Pin** important notes to the top
+- Pick from **7 colour tags**
+- **Quick-add** from the modal or open the full editor
+- **Search** and **swipe to delete**
+
+### 💸 Finance (Income / Expense)
+- Add income or expense with **amount + category**
+- See the running **balance** and per-category **spend bars**
+- View the **dashboard totals** at a glance
+- **Search / filter** the transaction log
+- **Edit or delete** any entry
+
+### 👥 Baki Khata (people ledger)
+- Add a person and track a running **receivable / payable** balance
+- Log **"gave"** or **"got"** transactions against a person
+- See **per-person history** and current balance
+- **Search** the contact list
+
+### 🏦 Loans
+- Add a loan with **principal / rate / instalment**
+- Track **payment history** and **remaining-balance** progress bar
+- Set a **reminder** for the next instalment
+- **Mark instalments paid** and watch the bar drop
+
+### 📺 Subscriptions
+- Add Netflix / Spotify / etc. style subscriptions
+- Pick **billing cycle** (Weekly / Monthly / Quarterly / Yearly)
+- Choose **currency** (BDT / USD / …)
+- **Pause / Resume** subscriptions
+- See **monthly spend** summary card
+- Filter **due-soon** subscriptions
+- **Search** the list
+
+### 🧮 Calculator Hub — 20+ tools across 5 categories
+- **General:** Basic 4-function · Percentage · Discount · Tip · Bill Split
+- **Education:** GPA · CGPA · Marks % · Attendance
+- **Health:** BMI · BMR · Ideal Weight · Water Intake *(banner: not medical advice)*
+- **Finance:** EMI · Savings · Simple Interest · VAT
+- **BD Special:** Decimal ↔ Katha ↔ Bigha ↔ Acre · Feet ↔ হাত · Salary Breakdown · Electricity-bill estimator
+- Every calc is **dark-theme friendly**, gives **instant results**, and has optional **history**
+
+### 🔄 Unit Converter
+- **Length**, **Weight**, **Temperature**, **Volume** tabs
+- **Bi-directional** conversion with instant results
+
+### 📅 Date Tools
+- **Age** calculator
+- **Days Between** two dates
+- **Countdown** to an event (e.g. পরীক্ষা)
+- **Calendar** picker (Flutter's built-in `CalendarDatePicker`)
+
+### 🛒 Shopping List
+- **Tap-add** items with optional **quantity chips**
+- **Check off** items as you shop
+- **Clear checked** in one tap
+- **Search** and **swipe to delete**
+
+### 🛡️ Vault (password manager)
+- Add credentials by **category** (Banking / Social / Work / …)
+- **Search** the vault
+- **Show / hide** password · **copy** to clipboard
+- See inline **Security Health** meter (Weak / Compromised counts)
+- **Edit or delete** entries
+
+### 💬 Social — Posts
+- Browse a feed with **search** + **category chips** (All / Pinned / Diary / Thoughts / …)
+- **Like** and **share** counter on each post
+
+### 📣 Broadcast Studio
+- Build a **multi-photo carousel deck**
+- Choose **square** or **story** aspect
+- Apply the **AI Enhance** hint button
+- Pick **category tags** (Diary / Thoughts / Recipe)
+- **Save Draft** or **Publish Broadcast**
+
+### 🌱 Habits
+- See current **streak** and **consistency %**
+- **Weekly view** (Mon–Sun) with per-day check
+- **Monthly trend** card
+- Create habits with **14 icons** and **8 colour accents**
+- Pick **recurrence** (Daily / Weekly)
+- **Edit / delete** habits
+
+### 😊 Mood / Daily Reflect
+- Pick from a **5-step emoji** selector
+- Read the **daily prompt**
+- Write a free-text **reflection**
+- Browse the **monthly calendar** of entries
+- Switch between **Entries / Mood / Stats / Settings** tabs
+
+### 📿 Prayer & Qibla (fully offline)
+- View all **5 waqts**: Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha
+- Pick from **8 Bangladeshi city presets**
+- Tap **GPS Detect** to use your location
+- Use the **Live Qibla compass** with **bearing (°)** + **heading (°)**
+- Spin the **Tasbih** counter
+- Set **per-waqt reminders** before each prayer
+
+### 🔔 Reminders
+- See **one aggregated sorted list** of every reminder from Tasks + Loans
+- **Jump straight** to the source task / loan
+
+### 📰 Notice Board (Firestore)
+- Browse public notices pulled live
+- See **pinned items** at the top
+- Tap **"Read more"** links when present
+
+### 🧠 Quiz (Firestore)
+- Browse **multiple categories** with icons & colours
+- Play **4-option MCQs** with hints
+- See your **result** saved to history
+
+### 👤 Profile
+- Set **avatar** (from gallery), display name, bio
+- Set **home city** (auto-detect or manual city list)
+- Jump straight to **Settings**
+
+### ⚙️ Settings
+- Switch **Language** (বাংলা / English) at runtime
+- Switch **Theme** (System / Light / Dark)
+- Open **Backup & Restore**
+- **Clear history** for any tool
+- Open **Profile** editor
+
+### 💾 Backup & Restore
+- Create a single **`.json` backup** of every Hive box (tasks, notes, finance, baki, loans, shopping, habits, mood, vault, quiz results, calculator history)
+- **Share** via WhatsApp / Email / Drive / Downloads
+- **Restore** from any backup file — **safe & private** (never leaves your phone through a server)
+
+### ✉️ Contact us
+- Submit **name + email + 2000-char message**
+- Sends directly to the `contact_messages` Firestore collection
+
+### 🕘 Calculator History
+- Filterable log of every prior calculation & transaction, **grouped by tool**
+- **All / Calculator / Finance / Notes** filters
+
+---
+
 ## 📸 Screenshots
 
 > All screenshots are resized to 540 px wide so the README stays readable on mobile. Tap any image to open the original at full size.
@@ -203,168 +367,6 @@ All five waqts · Bangladeshi preset cities · GPS detect · **Live Qibla compas
 - **Backup** — generates a single `.json` with *everything* (tasks, notes, finance, baki, loans, shopping, habits, mood, vault, quiz results, calculator history). Share via WhatsApp / Email / Drive / Downloads. **Safe & private** — the file never leaves your phone through a server.
 - **Contact us** — name + email + 2000-char message → directly stores a document in `contact_messages` Firestore.
 - **Calculator history** — filterable log of every prior calculation & transaction grouped by tool.
-
----
-
-## ✅ What you can do — full task list
-
-Everything you can perform inside Daily Utility, organised by section.
-
-### 🏠 Home & Dashboard
-- See today's mood emoji + change it in one tap
-- View today's habit checklist at a glance
-- Open the side-drawer **More** menu (profile, task counts, finance shortcuts, bottom nav)
-- Browse the active **Stories carousel**
-- Quick-launch any section via chips (Tasks, Notes, Finance, Calculator, Vault, etc.)
-- Open the **Studio** to publish a new post
-
-### ✅ Tasks (Todo)
-- Create a task with **priority** (Low / Med / High)
-- Set a **due date + time**
-- Pick **recurrence** (Once / Daily / Weekly / Monthly) — completing rolls the task to its next date
-- Attach an optional **reminder** (5 / 10 / 20 / 30 / 45 / 60 min before)
-- View the **Active** vs **Completed History** tabs
-- See a **progress badge** on the active list
-- Swipe to delete · search · sort
-
-### 📝 Notes
-- Create **text notes** or **checklist** notes
-- **Pin** important notes to the top
-- Pick from **7 colour tags**
-- **Quick-add** from the modal or open the full editor
-- Search and swipe to delete
-
-### 💸 Finance (Income / Expense)
-- Add income or expense with **amount + category**
-- See the running **balance** and per-category **spend bars**
-- View the **dashboard** totals
-- Search / filter the transaction log
-- Edit or delete any entry
-
-### 👥 Baki Khata (people ledger)
-- Add a person and track a running **receivable / payable** balance
-- Log **"gave"** or **"got"** transactions against a person
-- See per-person history and current balance
-- Search the contact list
-
-### 🏦 Loans
-- Add a loan with **principal / rate / instalment**
-- Track **payment history** and **remaining-balance** progress bar
-- Set a **reminder** for the next instalment
-- Mark instalments paid and watch the bar drop
-
-### 📺 Subscriptions
-- Add Netflix / Spotify / etc. style subs
-- Pick **billing cycle** (Weekly / Monthly / Quarterly / Yearly)
-- Choose **currency** (BDT / USD / …)
-- **Pause / Resume** subscriptions
-- See **monthly spend** summary card
-- Filter **due-soon** subs
-- Search the list
-
-### 🧮 Calculator Hub — 20+ tools across 5 categories
-- **General:** Basic 4-function · Percentage · Discount · Tip · Bill Split
-- **Education:** GPA · CGPA · Marks % · Attendance
-- **Health:** BMI · BMR · Ideal Weight · Water Intake *(banner: not medical advice)*
-- **Finance:** EMI · Savings · Simple Interest · VAT
-- **BD Special:** Decimal ↔ Katha ↔ Bigha ↔ Acre · Feet ↔ হাত · Salary Breakdown · Electricity-bill estimator
-- Every calc is **dark-theme friendly**, instant results, optional **history**
-
-### 🔄 Unit Converter
-- **Length**, **Weight**, **Temperature**, **Volume** tabs
-- Bi-directional conversion with instant results
-
-### 📅 Date Tools
-- **Age** calculator
-- **Days Between** two dates
-- **Countdown** to an event (e.g. পরীক্ষা)
-- **Calendar** picker (Flutter's built-in `CalendarDatePicker`)
-
-### 🛒 Shopping List
-- **Tap-add** items with optional **quantity chips**
-- **Check off** items as you shop
-- **Clear checked** in one tap
-- Search and swipe to delete
-
-### 🛡️ Vault (password manager)
-- Add credentials by **category** (Banking / Social / Work / …)
-- **Search** the vault
-- **Show / hide** password · **copy** to clipboard
-- See inline **Security Health** meter (Weak / Compromised counts)
-- Edit or delete entries
-
-### 💬 Social — Posts
-- Browse a feed with **search** + **category chips** (All / Pinned / Diary / Thoughts / …)
-- **Like** and **share** counter on each post
-
-### 📣 Broadcast Studio
-- Build a **multi-photo carousel deck**
-- Choose **square** or **story** aspect
-- Apply the **AI Enhance** hint button
-- Pick **category tags** (Diary / Thoughts / Recipe)
-- **Save Draft** or **Publish Broadcast**
-
-### 🌱 Habits
-- See current **streak** and **consistency %**
-- **Weekly view** (Mon–Sun) with per-day check
-- **Monthly trend** card
-- Create habits with **14 icons** and **8 colour accents**
-- Pick **recurrence** (Daily / Weekly)
-- Edit / delete habits
-
-### 😊 Mood / Daily Reflect
-- Pick from a **5-step emoji** selector
-- Read the **daily prompt**
-- Write a free-text **reflection**
-- Browse the **monthly calendar** of entries
-- Switch between **Entries / Mood / Stats / Settings** tabs
-
-### 📿 Prayer & Qibla (fully offline)
-- View all **5 waqts**: Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha
-- Pick from **8 Bangladeshi city presets**
-- Tap **GPS Detect** to use your location
-- Use the **Live Qibla compass** with bearing (°) + heading (°)
-- Spin the **Tasbih** counter
-- Set **per-waqt reminders** before each prayer
-
-### 🔔 Reminders
-- See **one aggregated sorted list** of every reminder from Tasks + Loans
-- Jump straight to the source task / loan
-
-### 📰 Notice Board (Firestore)
-- Browse public notices pulled live
-- See pinned items at the top
-- Tap "Read more" links when present
-
-### 🧠 Quiz (Firestore)
-- Browse **multiple categories** with icons & colours
-- Play **4-option MCQs** with hints
-- See your **result** saved to history
-
-### 👤 Profile
-- Set **avatar** (from gallery), display name, bio
-- Set **home city** (auto-detect or manual city list)
-- Jump straight to **Settings**
-
-### ⚙️ Settings
-- Switch **Language** (বাংলা / English) at runtime
-- Switch **Theme** (System / Light / Dark)
-- Open **Backup & Restore**
-- **Clear history** for any tool
-- Open **Profile** editor
-
-### 💾 Backup & Restore
-- Create a single **`.json` backup** of every Hive box (tasks, notes, finance, baki, loans, shopping, habits, mood, vault, quiz results, calculator history)
-- **Share** via WhatsApp / Email / Drive / Downloads
-- **Restore** from any backup file — safe & private (never leaves your phone through a server)
-
-### ✉️ Contact us
-- Submit **name + email + 2000-char message**
-- Sends directly to the `contact_messages` Firestore collection
-
-### 🕘 Calculator History
-- Filterable log of every prior calculation & transaction grouped by tool
-- All / Calculator / Finance / Notes filters
 
 ---
 

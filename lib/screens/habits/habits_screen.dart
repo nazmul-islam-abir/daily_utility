@@ -8,12 +8,7 @@ import '../../services/locale_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
 import 'habit_editor_sheet.dart';
-
-IconData _iconFromCode(int cp) {
-  // ignore: non_const_argument_for_const_parameter
-  final icon = IconData(cp, fontFamily: 'MaterialIcons', matchTextDirection: false);
-  return icon;
-}
+import 'habit_icons.dart';
 
 /// Habits screen — design #5. Hero with Current Streak + Consistency, a
 /// 7-day weekly-view row, today's habits with circular check buttons, and
@@ -244,7 +239,7 @@ class _HabitRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final color = Color(habit.colorValue);
-    final icon = _iconFromCode(habit.iconCodePoint);
+    final icon = habitIconFromCode(habit.iconCodePoint);
     return PressableCard(
       color: scheme.surface,
       onTap: () => showModalBottomSheet(context: context, isScrollControlled: true, backgroundColor: scheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))), builder: (_) => HabitEditorSheet(existing: habit)),
