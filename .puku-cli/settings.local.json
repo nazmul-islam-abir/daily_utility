@@ -8,7 +8,13 @@
       "Bash(flutter run:*)",
       "Bash(flutter --version)",
       "Bash(flutter pub:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python -c \"import pptx; print\\(''pptx version:'', pptx.__version__\\)\")",
+      "Bash(py --version)",
+      "Bash(pip show:*)",
+      "Bash(pip3 show:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)"
     ]
   }
 }

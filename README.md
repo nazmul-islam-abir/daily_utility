@@ -10,21 +10,15 @@
 
 ---
 
-## ✨ What's inside
+## 📥 Download APK
 
-A single Material-3 Flutter app that ships **20+ daily-life features** end-to-end. Everything personal is stored **offline on the device** (Hive) — only public content (notice board, quiz categories) is fetched from Firebase Firestore.
+<p align="center">
+  <a href="YOUR_DEMO_DOWNLOAD_LINK_HERE">
+    <img src="https://img.shields.io/badge/⬇%20Download-APK-02569B?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+  </a>
+</p>
 
-- 🏠 **Home dashboard** — mood · habits · stories carousel · post studio · quick-launch chips
-- ✅ **Productivity** — Tasks (priority / recurrence / due date / reminder), Notes (checklists + colour tags)
-- 💸 **Finance** — Income/Expense, **Baki Khata** (people ledger), **Loan** tracker, **Subscriptions** (BDT/USD)
-- 🧮 **Utilities** — Calculator hub (20+ tools / 5 categories), **Unit Converter**, **Date Tools**
-- 📿 **Lifestyle** — **Habit** tracker, **Mood / Daily Reflect**, **Shopping List**, **Prayer & Qibla** (offline via `adhan_dart`), **Reminders**
-- 🛡️ **Security** — **Password Vault** (weak/compromised detection)
-- 💬 **Social** — Posts feed + **Broadcast Studio** (carousel deck + AI Enhance)
-- 📰 **Content** — **Notice board** (Firestore), **Quiz** (Firestore, multi-category)
-- ⚙️ **System** — Profile, **Settings** (Bangla/English + theme), **Backup & Restore** (.json on-device), **Contact us** (Firestore)
-
-> 100 % Material 3 · fully responsive · dark theme first · bilingual (English / বাংলা) · built to be **boring on purpose** so your data stays yours.
+<p align="center"><i>Replace <code>YOUR_DEMO_DOWNLOAD_LINK_HERE</code> with your hosted APK URL (GitHub release, Google Drive, etc.).</i></p>
 
 ---
 
@@ -36,7 +30,7 @@ A single Material-3 Flutter app that ships **20+ daily-life features** end-to-en
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_063438.png" width="280" alt="Home dashboard — quick-launch chips, mood selector, today's habits, stories carousel, post studio" />
-&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_064642.png" width="280" alt="Side drawer / More menu with profile, task counts, finance shortcuts, and bottom nav" />
 </p>
 
@@ -49,7 +43,7 @@ Quick-access chips for every section, today's mood emoji, today's habits at a gl
 #### ✅ Tasks
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_063501.png" width="280" alt="Tasks active list with progress badge and tabs" />
-&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_063626.png" width="280" alt="New task editor with priority, recurrence, due date" />
 </p>
 
@@ -58,7 +52,7 @@ Priority · due date+time · recurrence (Once / Daily / Weekly / Monthly) · opt
 #### 📝 Notes
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_063646.png" width="280" alt="Notes quick-add modal with colour tags" />
-&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_063656.png" width="280" alt="Notes full editor for Parkinson's research note" />
 </p>
 
@@ -70,17 +64,17 @@ Text or checklist notes, pin-to-top, 7 colour tags.
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_063729.png" width="220" alt="Baki Khata — people ledger with receivable and payable" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_063738.png" width="220" alt="Finance dashboard — balance, income/expense, spending by category" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_063707.png" width="220" alt="Loan list with progress bars" />
 </p>
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_063751.png" width="220" alt="New loan form" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_063718.png" width="220" alt="New transaction form — expense/income toggle, category chips" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_064112.png" width="220" alt="Subscriptions hub — monthly spend, search, list" />
 </p>
 
@@ -98,7 +92,7 @@ Running balance for each person, per-category spend bars, instalment progress wi
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_063826.png" width="280" alt="Calculator hub — General, Education, Health, Finance, BD Special" />
-&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_063906.png" width="280" alt="Unit Converter with Length / Weight / Temp / Volume tabs and a 1 m -> 0.001 km example" />
 </p>
 
@@ -142,7 +136,7 @@ Searchable, categorised (Banking / Social / Work / …) · show/hide password ·
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_064418.png" width="280" alt="Posts feed with search and category chips" />
-&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_064450.png" width="280" alt="Broadcast Studio — multi-photo carousel editor with AI Enhance and Publish Broadcast" />
 </p>
 
@@ -154,9 +148,9 @@ A lightweight feed with search · tabs (All / Pinned / Diary / Thoughts) · a **
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_064127.png" width="220" alt="Habits dashboard — streak, consistency, weekly view, today's habits" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_064141.png" width="220" alt="Daily Reflect — date strip, daily prompt, emoji selector, reflection text" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_064153.png" width="220" alt="New habit editor — title, subtitle, icon grid, colour palette, recurrence" />
 </p>
 
@@ -170,7 +164,7 @@ Current streak + consistency % · weekly view (Mon–Sun) · per-day check · 14
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_064606.png" width="280" alt="Prayer schedule — Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha with Qibla bearing & heading and Tasbih counter" />
-&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_064619.png" width="280" alt="Live Qibla compass with bearing 279.3°, heading 235°, GPS Detect and Pick City actions" />
 </p>
 
@@ -186,23 +180,21 @@ All five waqts · Bangladeshi preset cities · GPS detect · **Live Qibla compas
 
 **Reminders** is one sorted list of every reminder created across Tasks and Loans — no separate "medicine reminder" screen, just create a recurring Todo.
 
-> 📰 Notice board and 🧠 Quiz are fetched live from Firestore — see the **Firebase setup** section below for the schemas used to publish content from the console.
-
 ---
 
 ### Profile, Settings, Backup, Contact us, History
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_073936.png" width="220" alt="Profile screen — avatar, identity, home city, settings shortcut" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_073951.png" width="220" alt="Settings — language Bangla/English, backup, theme, clear history" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_065836.png" width="220" alt="Backup & Restore — create & share backup file, restore from backup file, safe & private note" />
 </p>
 
 <p align="center">
   <img src="app_images/sm/Screenshot_20260927_065845.png" width="220" alt="Contact us form — name, email, 2000-char message, send button" />
-&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="app_images/sm/Screenshot_20260927_065811.png" width="220" alt="Calculator history with All / Calculator / Finance / Notes filters" />
 </p>
 
@@ -214,298 +206,165 @@ All five waqts · Bangladeshi preset cities · GPS detect · **Live Qibla compas
 
 ---
 
-## 🛠️ Tech stack
+## ✅ What you can do — full task list
 
-| Layer            | Choice                                                                 |
-|------------------|------------------------------------------------------------------------|
-| Framework        | **Flutter 3.x / Dart 3.x** — Material 3                                |
-| Local persistence| **Hive** — offline-first for *all* personal data                       |
-| Cloud            | **Firebase Firestore** — public content only (notices, quizzes, contact) |
-| State            | `ValueNotifier` per-service singletons                                 |
-| Theming          | `Theme.of(context).colorScheme.*` tokens (no hardcoded hex in screens) |
-| Reminders        | `flutter_local_notifications`                                          |
-| Prayer times     | `adhan_dart` (offline astronomical calc, Karachi + Hanafi)            |
-| Location         | `geolocator` (Qibla + GPS detect)                                      |
-| Sharing          | `share_plus` (backup file share)                                       |
-| Codegen          | Hand-written `TypeAdapter`s (no `build_runner` dependency)            |
+Everything you can perform inside Daily Utility, organised by section.
 
----
+### 🏠 Home & Dashboard
+- See today's mood emoji + change it in one tap
+- View today's habit checklist at a glance
+- Open the side-drawer **More** menu (profile, task counts, finance shortcuts, bottom nav)
+- Browse the active **Stories carousel**
+- Quick-launch any section via chips (Tasks, Notes, Finance, Calculator, Vault, etc.)
+- Open the **Studio** to publish a new post
 
-## 🧱 Features in detail
+### ✅ Tasks (Todo)
+- Create a task with **priority** (Low / Med / High)
+- Set a **due date + time**
+- Pick **recurrence** (Once / Daily / Weekly / Monthly) — completing rolls the task to its next date
+- Attach an optional **reminder** (5 / 10 / 20 / 30 / 45 / 60 min before)
+- View the **Active** vs **Completed History** tabs
+- See a **progress badge** on the active list
+- Swipe to delete · search · sort
 
-### Productivity
-- **Todo** — priority, due date+time, recurring (daily / weekly / monthly — completing a recurring task logs it to history and rolls the live task to its next date), optional reminder (5/10/20/30/45/60 min before), completed history tab.
-- **Notes** — text or checklist notes, pin-to-top, colour tags.
+### 📝 Notes
+- Create **text notes** or **checklist** notes
+- **Pin** important notes to the top
+- Pick from **7 colour tags**
+- **Quick-add** from the modal or open the full editor
+- Search and swipe to delete
 
-### Finance
-- **Finance** — income/expense, categories, balance, per-category spend breakdown.
-- **Baki Khata** — people, running balance (receivable/payable), "gave" / "got" transaction log.
-- **Loan** — principal / rate / instalment, payment history, remaining-balance progress bar, optional reminder for the next instalment.
-- **Subscriptions** — Netflix / Spotify / etc. style manager with weekly / monthly / quarterly / yearly cycles, multi-currency, pause/resume, due-soon filter, monthly spend summary card.
+### 💸 Finance (Income / Expense)
+- Add income or expense with **amount + category**
+- See the running **balance** and per-category **spend bars**
+- View the **dashboard** totals
+- Search / filter the transaction log
+- Edit or delete any entry
 
-### Calculators & Converters
-**20+ calculators** across:
-- *General* — basic 4-function, percentage, discount, tip + bill-split
-- *Education* — GPA / CGPA, marks %, attendance
-- *Health* — BMI, BMR, ideal weight, water intake (banner: *not medical advice*)
-- *Finance* — EMI, savings, simple interest, VAT
-- *BD Special* — Bangladesh land-unit converter (decimal / katha / bigha / acre), feet↔হাত, salary breakdown, electricity-bill estimator
+### 👥 Baki Khata (people ledger)
+- Add a person and track a running **receivable / payable** balance
+- Log **"gave"** or **"got"** transactions against a person
+- See per-person history and current balance
+- Search the contact list
 
-Plus **Unit Converter** (Length / Weight / Temp / Volume) and **Date Tools** (Age / Days Between / Countdown / Calendar).
+### 🏦 Loans
+- Add a loan with **principal / rate / instalment**
+- Track **payment history** and **remaining-balance** progress bar
+- Set a **reminder** for the next instalment
+- Mark instalments paid and watch the bar drop
 
-### Lifestyle
-- **Habits** — current streak, consistency %, weekly view, monthly trend, 14 icons, 8 colours.
-- **Mood / Daily Reflect** — daily prompt, 5-step emoji, free-text reflection, monthly calendar of entries.
-- **Shopping List** — quick-add, qty, check off, clear-checked.
-- **Prayer & Qibla** — *fully offline*. Coordinates are cached in Hive so the last-used location persists. Includes 8 Bangladeshi city presets, **GPS Detect**, a **live Qibla compass** (bearing ° + heading °), Tasbih counter, per-waqt reminders before each of the 5 prayer times.
-- **Reminders** — one aggregated sorted view across Todo + Loan.
+### 📺 Subscriptions
+- Add Netflix / Spotify / etc. style subs
+- Pick **billing cycle** (Weekly / Monthly / Quarterly / Yearly)
+- Choose **currency** (BDT / USD / …)
+- **Pause / Resume** subscriptions
+- See **monthly spend** summary card
+- Filter **due-soon** subs
+- Search the list
 
-### Security
-- **Vault** — local password/credential store. Categorised (All / Banking / Social / Work / …), searchable, show/hide, copy. Inline **Security Health** meter shows "Weak" and "Compromised" counts so you can see at a glance which logins need attention.
+### 🧮 Calculator Hub — 20+ tools across 5 categories
+- **General:** Basic 4-function · Percentage · Discount · Tip · Bill Split
+- **Education:** GPA · CGPA · Marks % · Attendance
+- **Health:** BMI · BMR · Ideal Weight · Water Intake *(banner: not medical advice)*
+- **Finance:** EMI · Savings · Simple Interest · VAT
+- **BD Special:** Decimal ↔ Katha ↔ Bigha ↔ Acre · Feet ↔ হাত · Salary Breakdown · Electricity-bill estimator
+- Every calc is **dark-theme friendly**, instant results, optional **history**
 
-### Social
-- **Posts** — feed with search + chips (All / Pinned / Diary / Thoughts / …), like / share counters.
-- **Broadcast Studio** — multi-image carousel deck, square / story aspect selector, **AI Enhance** hint button, category tags (Diary / Thoughts / Recipe), Save Draft / Publish.
+### 🔄 Unit Converter
+- **Length**, **Weight**, **Temperature**, **Volume** tabs
+- Bi-directional conversion with instant results
 
-### Content (Firestore-backed)
-- **Notice Board** — admin pushes `title / para / imgurl / linkurl / isPinned`; users read.
-- **Quiz** — multi-category. Each Firestore document = one category; its `questions` array holds 4-option MCQs. Adding a doc in the console = new category appears in the app automatically, no update needed.
+### 📅 Date Tools
+- **Age** calculator
+- **Days Between** two dates
+- **Countdown** to an event (e.g. পরীক্ষা)
+- **Calendar** picker (Flutter's built-in `CalendarDatePicker`)
 
-### System
-- **Profile** — avatar (gallery), display name, bio, home city (auto-detect or manual city list).
-- **Settings** — Language (English / বাংলা), Theme (System / Light / Dark), Backup, Clear history.
-- **Backup & Restore** — single `.json` of every Hive box, share-sheet / picker. Safe & private (file never leaves your phone through a server).
-- **Contact us** — writes a new document to the `contact_messages` Firestore collection.
+### 🛒 Shopping List
+- **Tap-add** items with optional **quantity chips**
+- **Check off** items as you shop
+- **Clear checked** in one tap
+- Search and swipe to delete
 
----
+### 🛡️ Vault (password manager)
+- Add credentials by **category** (Banking / Social / Work / …)
+- **Search** the vault
+- **Show / hide** password · **copy** to clipboard
+- See inline **Security Health** meter (Weak / Compromised counts)
+- Edit or delete entries
 
-## 🔥 Firebase setup
+### 💬 Social — Posts
+- Browse a feed with **search** + **category chips** (All / Pinned / Diary / Thoughts / …)
+- **Like** and **share** counter on each post
 
-The app talks to **one** Firestore project. Three collections are touched at runtime (see [`firestore.rules`](firestore.rules)):
+### 📣 Broadcast Studio
+- Build a **multi-photo carousel deck**
+- Choose **square** or **story** aspect
+- Apply the **AI Enhance** hint button
+- Pick **category tags** (Diary / Thoughts / Recipe)
+- **Save Draft** or **Publish Broadcast**
 
-| Collection         | Read    | Write (create) | Write (update/delete) |
-|--------------------|---------|----------------|-----------------------|
-| `notice`           | public  | admin only     | admin only            |
-| `quiz_categories`  | public  | admin only     | admin only            |
-| `contact_messages` | admin   | public         | admin only            |
+### 🌱 Habits
+- See current **streak** and **consistency %**
+- **Weekly view** (Mon–Sun) with per-day check
+- **Monthly trend** card
+- Create habits with **14 icons** and **8 colour accents**
+- Pick **recurrence** (Daily / Weekly)
+- Edit / delete habits
 
-### `notice/{docId}`
+### 😊 Mood / Daily Reflect
+- Pick from a **5-step emoji** selector
+- Read the **daily prompt**
+- Write a free-text **reflection**
+- Browse the **monthly calendar** of entries
+- Switch between **Entries / Mood / Stats / Settings** tabs
 
-| Field      | Type   | Required | Notes                        |
-|------------|--------|----------|------------------------------|
-| `title`    | string | yes      | Headline                     |
-| `para`     | string | yes      | Body text                    |
-| `imgurl`   | string | no       | Optional image URL           |
-| `linkurl`  | string | no       | Optional "Read more" link    |
-| `isPinned` | bool   | no       | Pinned to top                |
+### 📿 Prayer & Qibla (fully offline)
+- View all **5 waqts**: Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha
+- Pick from **8 Bangladeshi city presets**
+- Tap **GPS Detect** to use your location
+- Use the **Live Qibla compass** with bearing (°) + heading (°)
+- Spin the **Tasbih** counter
+- Set **per-waqt reminders** before each prayer
 
-### `quiz_categories/{docId}`
+### 🔔 Reminders
+- See **one aggregated sorted list** of every reminder from Tasks + Loans
+- Jump straight to the source task / loan
 
-| Field       | Type     | Required | Notes                                                                                  |
-|-------------|----------|----------|----------------------------------------------------------------------------------------|
-| `name`      | string   | yes      | Display title (e.g. `"Physics"`)                                                       |
-| `subtitle`  | string   | no       | Shown under title                                                                      |
-| `icon`      | string   | no       | One of: `science`, `physics`, `chemistry`, `biology`, `math`, `history`, `geography`, `gk`, `art`, `language`, `sports`, `music`, `movies`, `tech` |
-| `color`     | string   | no       | Hex like `0xFF14B8A6` or `#14B8A6`                                                     |
-| `order`     | number   | no       | Ascending sort key                                                                     |
-| `questions` | array    | yes      | `[{q, options[4], answer, hint?}]`                                                     |
+### 📰 Notice Board (Firestore)
+- Browse public notices pulled live
+- See pinned items at the top
+- Tap "Read more" links when present
 
-Question shape:
-```json
-{
-  "q": "What is the SI unit of force?",
-  "options": ["Joule","Newton","Watt","Pascal"],
-  "answer": 1,
-  "hint": "Named after the father of mechanics."
-}
-```
+### 🧠 Quiz (Firestore)
+- Browse **multiple categories** with icons & colours
+- Play **4-option MCQs** with hints
+- See your **result** saved to history
 
-To add a new category: just create another document in `quiz_categories` from the Firebase console. The next app refresh picks it up automatically — **no app update needed**.
+### 👤 Profile
+- Set **avatar** (from gallery), display name, bio
+- Set **home city** (auto-detect or manual city list)
+- Jump straight to **Settings**
 
-### `contact_messages/{docId}`
+### ⚙️ Settings
+- Switch **Language** (বাংলা / English) at runtime
+- Switch **Theme** (System / Light / Dark)
+- Open **Backup & Restore**
+- **Clear history** for any tool
+- Open **Profile** editor
 
-| Field        | Type      | Required | Notes                                  |
-|--------------|-----------|----------|----------------------------------------|
-| `name`       | string    | yes      | Sender's name                          |
-| `email`      | string    | yes      | Sender's email (used to reply)         |
-| `message`    | string    | yes      | Issue / suggestion body                |
-| `createdAt`  | timestamp | server   | Server-set when document is created    |
-| `appVersion` | string    | no       | App version at submission              |
-| `platform`   | string    | no       | OS / platform info                     |
-| `locale`     | string    | no       | UI locale (`bn` / `en`)                |
+### 💾 Backup & Restore
+- Create a single **`.json` backup** of every Hive box (tasks, notes, finance, baki, loans, shopping, habits, mood, vault, quiz results, calculator history)
+- **Share** via WhatsApp / Email / Drive / Downloads
+- **Restore** from any backup file — safe & private (never leaves your phone through a server)
 
-Submissions are visible from the Firebase console → Firestore → `contact_messages`. For auto-forwarding to a Gmail address, install the official **"Trigger Email"** Firebase Extension and point it at the collection.
+### ✉️ Contact us
+- Submit **name + email + 2000-char message**
+- Sends directly to the `contact_messages` Firestore collection
 
-### Deploy the rules
-
-```bash
-firebase deploy --only firestore:rules
-```
-
-The shipped [`firestore.rules`](firestore.rules) gives public-read / admin-write for `notice` and `quiz_categories`, and public-create / admin-read for `contact_messages`. Everything else is default-deny.
-
----
-
-## 💾 Local persistence (Hive)
-
-Everything except notices / quizzes / contact is **offline on the device**. Because this project can't run `build_runner` in the sandbox, every model has a **hand-written** `TypeAdapter` (in the same file as the model) — functionally identical to the generated code, just written by hand.
-
----
-
-## ▶️ Build & run
-
-### 1. First-time setup
-
-```bash
-cd daily_utility
-flutter create .           # generates android/, ios/, etc. — safe; does not touch lib/ or pubspec.yaml
-flutter pub get
-```
-
-### 2. Add permissions
-
-**`android/app/src/main/AndroidManifest.xml`** — add inside `<manifest>`, above `<application>`:
-
-```xml
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-```
-
-**`ios/Runner/Info.plist`** — add:
-
-```xml
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>Prayer times and Qibla direction need your location.</string>
-```
-
-### 3. Run
-
-```bash
-flutter analyze            # catch any lint drift before shipping
-flutter run
-```
-
-To point the app at your own Firestore project, edit `lib/firebase_options.dart` with your project's credentials.
-
-### 4. Re-generating the screenshot thumbnails
-
-If you capture new screenshots at `app_images/Screenshot_*.png`, regenerate the mobile-friendly versions with:
-
-```bash
-python scripts/resize_screenshots.py
-```
-
-It writes resized copies to `app_images/sm/` at 540 px wide.
-
----
-
-## 📁 Project structure (high-level)
-
-```
-lib/
-├── main.dart
-├── firebase_options.dart          # Firebase config (per-platform)
-├── firestore.rules                # Firestore security rules
-│
-├── theme/app_theme.dart           # Material 3 colour scheme + tokens
-├── models/                        # Hand-written Hive TypeAdapters live here
-│   ├── todo.dart
-│   ├── note.dart
-│   ├── finance_transaction.dart
-│   ├── baki_person.dart
-│   ├── loan.dart
-│   ├── subscription.dart
-│   ├── habit.dart
-│   ├── mood_entry.dart
-│   ├── vault_entry.dart
-│   ├── quiz_category.dart         # + fromDoc() factory
-│   └── quiz_result.dart
-│
-├── services/                      # Singletons with ValueNotifier<...>
-│   ├── todo_service.dart
-│   ├── note_service.dart
-│   ├── finance_service.dart
-│   ├── baki_service.dart
-│   ├── loan_service.dart
-│   ├── subscription_service.dart
-│   ├── habit_service.dart
-│   ├── mood_service.dart
-│   ├── shopping_service.dart
-│   ├── vault_service.dart
-│   ├── backup_service.dart        # share / restore .json
-│   ├── notice_service.dart        # Firebase
-│   ├── quiz_service.dart          # Firebase
-│   └── contact_service.dart       # Firebase
-│
-├── screens/                       # Top-level pages
-│   ├── home/                      # Home dashboard, broadcast studio
-│   ├── notes/
-│   ├── todo/
-│   ├── finance/                   # finance + baki + loan + subs
-│   ├── habit/
-│   ├── mood/
-│   ├── settings/
-│   ├── contact/
-│   ├── vault/
-│   ├── posts/
-│   ├── notices/
-│   ├── quiz/                      # category hub + quiz player
-│   ├── calculator/                # hub + 20 calculator pages
-│   ├── date_tools/                # hub + age/days/countdown/calendar
-│   ├── shopping/
-│   ├── unit_converter/
-│   ├── backup/
-│   ├── prayer/                    # offline prayer + Qibla
-│   ├── reminders/
-│   └── profile/
-│
-├── widgets/                       # Shared building blocks
-│   ├── app_drawer.dart
-│   ├── section_card.dart
-│   └── ...
-│
-└── l10n_strings.dart              # bilingual tr(context, bn, en) helper
-
-scripts/
-└── resize_screenshots.py          # regenerates app_images/sm/ from originals
-
-app_images/                        # Original full-size screenshots (gitignored if huge)
-app_images/sm/                     # 540 px wide thumbnails used in README
-```
-
----
-
-## ✅ What works right now
-
-- All 20+ features end-to-end with persisted state
-- Full bilingual UI (English / বাংলা) with runtime language switch
-- Light + dark Material 3 themes (no hardcoded hex in any screen)
-- Offline-first for personal data (Hive) · cloud for public content (Firestore)
-- Empty-state UX on every cloud-backed screen with copy-pasteable setup hints
-- Search, filter, sort, swipe-to-delete everywhere it makes sense
-- Pull-to-refresh on every list that talks to Firestore
-- Backup / Restore that round-trips every Hive box
-
-## 📋 Known gaps / intentional non-features
-
-- **Voice notes** — data model only; the recording UI isn't built. (audio capture needs a separate plugin + platform permission wiring chunk of work)
-- **Qibla** — live compass is implemented; magnetic compass sensor is **not** wired up (numerical bearing only)
-- **Quiz authoring UI** — author via Firestore console, by design
-- **Contact-form auto-email** — submissions land in Firestore; pair with the **Trigger Email** extension if you want Gmail delivery
-- **Per-feature favourite / pin** — top-level only; no per-tool star
-
----
-
-## 🤝 Contributing
-
-PRs welcome — keep new features behind a single screen + a single service, and follow the existing `ValueNotifier` + `Theme.of(context).colorScheme` patterns. See `SETUP_AND_FEATURES.md` for the deeper architecture notes.
-
-## 📜 License
-
-MIT — see `LICENSE` (or `LICENSE.md`) if present, otherwise the standard MIT terms apply.
+### 🕘 Calculator History
+- Filterable log of every prior calculation & transaction grouped by tool
+- All / Calculator / Finance / Notes filters
 
 ---
 
