@@ -13,12 +13,14 @@
 ## 📥 Download APK
 
 <p align="center">
-  <a href="YOUR_DEMO_DOWNLOAD_LINK_HERE">
+  <a href="https://github.com/nazmul-islam-abir/daily_utility/releases/tag/v1.0.0">
     <img src="https://img.shields.io/badge/⬇%20Download-APK-02569B?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
   </a>
 </p>
 
-<p align="center"><i>Replace <code>YOUR_DEMO_DOWNLOAD_LINK_HERE</code> with your hosted APK URL (GitHub release, Google Drive, etc.).</i></p>
+<p align="center">
+  👉 <a href="https://github.com/nazmul-islam-abir/daily_utility/releases/tag/v1.0.0">https://github.com/nazmul-islam-abir/daily_utility/releases/tag/v1.0.0</a>
+</p>
 
 ---
 
